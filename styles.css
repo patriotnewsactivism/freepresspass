@@ -131,6 +131,168 @@ footer p {
   font-size: 0.9rem;
 }
 
+/* Disclaimers Section */
+.disclaimers {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+  border-left: 4px solid #dc143c;
+}
+
+.disclaimers h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.disclaimers p {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* Testimonials Section */
+.testimonials {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+  text-align: center;
+}
+
+.testimonials h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.testimonial {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-left: 3px solid #dc143c;
+  text-align: left;
+}
+
+.testimonial-author {
+  font-style: italic;
+  text-align: right;
+  color: #6c757d;
+}
+
+/* Contact Section */
+.contact {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+  text-align: center;
+}
+
+.contact h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.contact p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+/* FAQ Section */
+.faq-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+}
+
+.faq-section h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.faq-item {
+  margin-bottom: 1.5rem;
+}
+
+.faq-item h3 {
+  color: #dc143c;
+  margin-bottom: 0.5rem;
+}
+
+/* How It Works Section */
+.how-it-works {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+}
+
+.how-it-works h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.how-it-works ol {
+  padding-left: 1.5rem;
+}
+
+.how-it-works li {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+/* About Section */
+.about-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+}
+
+.about-section h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+/* Print Styles */
+@media print {
+  .form-section, .faq-section, .exposure-reports, footer, .about-section {
+    display: none;
+  }
+  
+  .preview-section {
+    box-shadow: none;
+    padding: 0;
+  }
+  
+  #passCanvas {
+    border: none;
+    width: 100%;
+    max-width: none;
+  }
+  
+  body {
+    background-color: white;
+  }
+  
+  main {
+    padding: 0;
+    margin: 0;
+  }
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .container {
@@ -143,5 +305,9 @@ footer p {
   
   header h1 {
     font-size: 1.5rem;
+  }
+  
+  .faq-section, .exposure-reports, footer, .about-section {
+    padding: 1rem;
   }
 }

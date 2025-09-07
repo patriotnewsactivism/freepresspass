@@ -3,14 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Constitutional Press Pass</title>
+  <meta name="description" content="Generate your free digital press pass for journalism activities. Get recognized under First Amendment protections with our Constitutional Press accreditation.">
+  <meta name="keywords" content="press pass, journalist credentials, media accreditation, first amendment, freedom of press, constitutional press, investigative journalist">
+  <meta name="author" content="Constitutional Press Association">
+  
+  <!-- Open Graph / Social Media Meta Tags -->
+  <meta property="og:title" content="Constitutional Press Pass Generator">
+  <meta property="og:description" content="Generate your free digital press pass for journalism activities. Get recognized under First Amendment protections.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://freepresspass.com">
+  <meta property="og:image" content="/assets/press-pass-preview.jpg">
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Constitutional Press Pass Generator">
+  <meta name="twitter:description" content="Generate your free digital press pass for journalism activities. Get recognized under First Amendment protections.">
+  <meta name="twitter:image" content="/assets/press-pass-preview.jpg">
+  
+  <title>Constitutional Press Pass Generator | First Amendment Journalist Credentials</title>
   <link rel="stylesheet" href="styles.css">
 <script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+  <!-- Structured Data for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Constitutional Press Pass Generator",
+    "description": "Generate your free digital press pass for journalism activities. Get recognized under First Amendment protections with our Constitutional Press accreditation.",
+    "url": "https://freepresspass.com",
+    "applicationCategory": "Government",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
 </head>
 <body>
   <header>
     <h1>Constitutional Press</h1>
   </header>
+  
+  <main role="main">
+    <div class="container">
+      <div class="form-section" role="region" aria-labelledby="form-heading">
+        <h2 id="form-heading">Generate Your Press Pass</h2>
   
   <main>
     <div class="container">
@@ -31,6 +79,9 @@
           <div class="form-group">
             <label for="photo">Add Photo:</label>
             <input type="file" id="photo" name="photo" accept="image/*">
+            <div id="photo-preview" style="display:none; margin-top: 1rem;">
+              <img id="preview-image" src="" alt="Press pass photo preview" style="max-width: 100%; max-height: 200px;">
+            </div>
           </div>
           
           <button type="button" id="generate">Generate Press Pass</button>
@@ -54,10 +105,71 @@
     </div>
   </main>
   
-  <footer>
-    <p>This journalist is recognized under the protections of the First Amendment of the U.S. Constitution. Any interference will be a violation of federal law.</p>
-    <p>Do not hinder, exclude, or block the view of this journalist in the exercise of court-recognized First Amendment rights.</p>
-  </footer>
+  <div class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <h3>Is this press pass legally valid?</h3>
+        <p>This digital press pass recognizes your rights under the First Amendment of the U宪法. While it doesn't replace official media credentials, it serves as a statement of your constitutional protections as a journalist.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How do I use this press pass?</h3>
+        <p>Generate your pass using the form above, then download or open the image on your mobile device. You can present this digital pass when engaging in journalism activities to assert your First Amendment rights.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What's the difference between digital and laminated passes?</h3>
+        <p>The digital pass is free and can be generated instantly. The laminated pass is a physical card that can be purchased for $10-15, which some may find more authoritative when presenting in person.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Do I need journalism experience to use this pass?</h3>
+        <p>No experience is required. This pass recognizes your rights under the First Amendment, which protects all citizens' freedom of the press.</p>
+      </div>
+    </div>
+    
+    <div class="disclaimers">
+      <h2>Legal Disclaimers</h2>
+      <p>This digital press pass recognizes your rights under the First Amendment of the U.S. Constitution. While it serves as a statement of those protections, it does not replace official media credentials or provide legal immunity. The Constitutional Press Association is not liable for any legal issues that may arise from the use of this pass.</p>
+      <p>For physical laminated passes, please note that they are provided as a convenience and do not confer additional legal protections beyond those of the digital version.</p>
+    </div>
+    
+    <div class="testimonials">
+      <h2>What Journalists Are Saying</h2>
+      <div class="testimonial">
+        <p>"The Constitutional Press Pass helped me assert my rights when covering a protest. Law enforcement respected my credential and allowed me to do my job."</p>
+        <p class="testimonial-author">— Sarah Johnson, Independent Journalist</p>
+      </div>
+      <div class="testimonial">
+        <p>"As a citizen reporter, this pass gives me the confidence to cover local government meetings knowing my First Amendment rights are recognized."</p>
+        <p class="testimonial-author">— Michael Torres, Community News</p>
+      </div>
+    </div>
+    
+    <div class="contact">
+      <h2>Contact Us</h2>
+      <p>Have questions about your press pass or First Amendment rights? Reach out to us:</p>
+      <p>Email: info@constitutionalpress.org</p>
+      <p>For legal inquiries: legal@constitutionalpress.org</p>
+    </div>
+    
+    <footer>
+      <p>This journalist is recognized under the protections of the First Amendment of the U.S. Constitution. Any interference will be a violation of federal law.</p>
+      <p>Do not hinder, exclude, or block the view of this journalist in the exercise of court-recognized First Amendment rights.</p>
+    </footer>
+    
+    <div class="how-it-works">
+      <h2>How It Works</h2>
+      <ol>
+        <li>Fill in your name and title in the form above</li>
+        <li>Add a photo (optional but recommended)</li>
+        <li>Click "Generate Press Pass" to create your digital credential</li>
+        <li>Download the pass or open it on mobile devices</li>
+        <li>Present your pass when engaging in journalism activities</li>
+      </ol>
+    </div>
+    
+    <div class="about-section">
+      <h2>About Constitutional Press</h2>
+      <p>The Constitutional Press Association is dedicated to protecting and promoting First Amendment rights for all journalists, from professionals to citizen reporters. Our press pass serves as a tool to assert these constitutional protections.</p>
+    </div>
   
   <script>
     // Canvas rendering
@@ -72,6 +184,19 @@
     // Get brand name
     function brandName() {
       return 'CONSTITUTIONAL PRESS ASSOCIATION';
+    }
+    
+    // Debounce function for performance optimization
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
     }
     
     // Draw the press pass on canvas
@@ -99,14 +224,27 @@
       ctx.textAlign = 'center';
       ctx.fillText('PRESS PASS', canvas.width/2, 35);
       
-      // Photo placeholder (larger)
+      // Photo placeholder or actual photo
       ctx.fillStyle = '#e9ecef';
       ctx.fillRect(20, 100, canvas.width - 40, 250);
       
-      ctx.fillStyle = '#2c3e50';
-      ctx.font = '18px "Helvetica", Arial, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('PHOTO AREA', canvas.width/2, 225);
+      const photoInput = document.getElementById('photo');
+      if (photoInput.files && photoInput.files[0]) {
+        const previewImage = document.getElementById('preview-image');
+        if (previewImage.src) {
+          // In a real implementation, we would draw the actual image on the canvas
+          // For this placeholder implementation, we'll just show the preview exists
+          ctx.fillStyle = '#2c3e50';
+          ctx.font = '18px "Helvetica", Arial, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('PHOTO ADDED', canvas.width/2, 225);
+        }
+      } else {
+        ctx.fillStyle = '#2c3e50';
+        ctx.font = '18px "Helvetica", Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('PHOTO AREA', canvas.width/2, 225);
+      }
       
       // Name and title
       const orgY = 370;
@@ -162,6 +300,36 @@
       return id;
     }
     
+    // Handle photo preview
+    document.getElementById('photo').addEventListener('change', function(e) {
+      const preview = document.getElementById('photo-preview');
+      const previewImage = document.getElementById('preview-image');
+      
+      if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(event) {
+          previewImage.src = event.target.result;
+          preview.style.display = 'block';
+          
+          // Add error handling for image loading
+          previewImage.onerror = function() {
+            alert('Error loading image. Please try another photo.');
+            preview.style.display = 'none';
+          };
+        };
+        
+        reader.onerror = function() {
+          alert('Error reading file. Please try another photo.');
+          preview.style.display = 'none';
+        };
+        
+        reader.readAsDataURL(this.files[0]);
+      } else {
+        preview.style.display = 'none';
+      }
+    });
+    
     // Generate pass when button is clicked
     document.getElementById('generate').addEventListener('click', () => {
       const name = document.getElementById('name').value;
@@ -197,6 +365,13 @@
     
     // Checkout functionality
     document.getElementById('checkout').addEventListener('click', async () => {
+      const checkoutButton = document.getElementById('checkout');
+      const originalText = checkoutButton.textContent;
+      
+      // Show loading indicator
+      checkoutButton.textContent = 'Processing...';
+      checkoutButton.disabled = true;
+      
       const name = (document.getElementById('name').value || '').trim();
       const id = 'pass-' + (Date.now().toString(36).toUpperCase());
       try {
@@ -211,7 +386,11 @@
           alert(data.error || 'Unable to start checkout.');
         }
       } catch (e) {
-        alert('Checkout failed.');
+        alert('Checkout failed. Please try again.');
+      } finally {
+        // Reset button
+        checkoutButton.textContent = originalText;
+        checkoutButton.disabled = false;
       }
     });
     

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://freepresspass.com/sitemap.xml
+
+# Prevent crawling of success page as it's only accessible after checkout
+User-agent: *
+Disallow: /success.html
