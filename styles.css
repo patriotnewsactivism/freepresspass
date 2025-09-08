@@ -131,6 +131,36 @@ footer p {
   font-size: 0.9rem;
 }
 
+/* Tagline section directly beneath the header */
+.tagline-section {
+  background: #f8f9fa;
+  color: #2c3e50;
+  text-align: center;
+  padding: 1rem 0.5rem;
+  margin-bottom: 2rem;
+  line-height: 1.4;
+}
+
+.tagline-section p {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.channel-links a {
+  color: #dc143c;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.channel-links a:hover {
+  text-decoration: underline;
+}
+
+.channel-links .separator {
+  color: #6c757d;
+  font-weight: normal;
+}
+
 /* Disclaimers Section */
 .disclaimers {
   background: #f8f9fa;
@@ -264,6 +294,125 @@ footer p {
 .about-section h2 {
   color: #2c3e50;
   margin-bottom: 1rem;
+}
+
+/* Courtesy Section: dark background with white text */
+.courtesy-section {
+  background-color: #0b0e16;
+  color: #ffffff;
+  text-align: center;
+  padding: 2rem 1rem;
+  margin: 0 auto;
+}
+
+.courtesy-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.courtesy-section p {
+  font-size: 1.2rem;
+}
+
+/* Follow Section: red background with white heading and white buttons */
+.follow-section {
+  background-color: #dc143c;
+  color: #ffffff;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.follow-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #ffffff !important;
+}
+
+/* Heading inside the follow section. Using a div instead of h2 to ensure styling takes precedence over global heading rules. */
+.follow-heading {
+  color: #ffffff !important;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.follow-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.follow-buttons a {
+  background-color: #ffffff;
+  color: #dc143c;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.follow-buttons a:hover {
+  background-color: #f9f9f9;
+}
+
+/* Info Section: container for cards explaining journalism principles */
+.info-section {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.info-card {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.info-card h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+}
+
+.info-card h4 {
+  color: #dc143c;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.info-card p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.info-card ul {
+  margin-left: 1.5rem;
+  list-style-type: disc;
+}
+
+.info-card ul li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+/* Adjust layout on small screens for new sections */
+@media (max-width: 768px) {
+  .follow-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .follow-buttons a {
+    width: 100%;
+    display: block;
+    text-align: center;
+  }
 }
 
 /* Print Styles */
