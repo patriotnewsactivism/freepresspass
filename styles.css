@@ -131,6 +131,36 @@ footer p {
   font-size: 0.9rem;
 }
 
+/* Tagline section directly beneath the header */
+.tagline-section {
+  background: #f8f9fa;
+  color: #2c3e50;
+  text-align: center;
+  padding: 1rem 0.5rem;
+  margin-bottom: 2rem;
+  line-height: 1.4;
+}
+
+.tagline-section p {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.channel-links a {
+  color: #dc143c;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.channel-links a:hover {
+  text-decoration: underline;
+}
+
+.channel-links .separator {
+  color: #6c757d;
+  font-weight: normal;
+}
+
 /* Disclaimers Section */
 .disclaimers {
   background: #f8f9fa;
@@ -264,6 +294,410 @@ footer p {
 .about-section h2 {
   color: #2c3e50;
   margin-bottom: 1rem;
+}
+
+/* Courtesy Section: dark background with white text */
+.courtesy-section {
+  background-color: #0b0e16;
+  color: #ffffff;
+  text-align: center;
+  padding: 2rem 1rem;
+  margin: 0 auto;
+}
+
+.courtesy-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.courtesy-section p {
+  font-size: 1.2rem;
+}
+
+/* Follow Section: red background with white heading and white buttons */
+.follow-section {
+  background-color: #dc143c;
+  color: #ffffff;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.follow-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #ffffff !important;
+}
+
+/* Heading inside the follow section. Using a div instead of h2 to ensure styling takes precedence over global heading rules. */
+.follow-heading {
+  color: #ffffff !important;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.follow-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.follow-buttons a {
+  background-color: #ffffff;
+  color: #dc143c;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.follow-buttons a:hover {
+  background-color: #f9f9f9;
+}
+
+/* Info Section: container for cards explaining journalism principles */
+.info-section {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.info-card {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.info-card h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+}
+
+.info-card h4 {
+  color: #dc143c;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.info-card p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.info-card ul {
+  margin-left: 1.5rem;
+  list-style-type: disc;
+}
+
+.info-card ul li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+/* Features Section */
+.features {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+}
+
+.features h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.feature-card {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.feature-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #dc143c;
+}
+
+/* Instructions Section */
+.instructions {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+}
+
+.instructions h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.instructions ol {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-left: 2rem;
+}
+
+.instructions li {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+/* Hero Section */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.hero-content {
+  flex: 1;
+}
+
+.hero-content h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.hero-content p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.hero-image {
+  flex: 1;
+  text-align: center;
+}
+
+.hero-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* CTA Buttons */
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.primary-btn {
+  background-color: #dc143c;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.primary-btn:hover {
+  background-color: #c0002d;
+}
+
+.secondary-btn {
+  background-color: #f8f9fa;
+  color: #2c3e50;
+  border: 1px solid #2c3e50;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.secondary-btn:hover {
+  background-color: #e9ecef;
+}
+
+/* Admin Styles */
+.login-container {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.login-form input {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.login-form button {
+  padding: 0.75rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-form button:hover {
+  background: #0056b3;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  display: none;
+}
+
+.admin-header {
+  background-color: #333;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.admin-panel {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 2rem;
+}
+
+.pass-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.pass-table th, .pass-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.pass-table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.pass-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.logout-btn {
+  background-color: #dc3545;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background-color: #c82333;
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.stat-card h3 {
+  margin-top: 0;
+  color: #666;
+}
+
+.stat-card .value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* Adjust layout on small screens for new sections */
+@media (max-width: 768px) {
+  .follow-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .follow-buttons a {
+    width: 100%;
+    display: block;
+    text-align: center;
+  }
+  
+  .hero {
+    flex-direction: column;
+  }
+  
+  .cta-buttons {
+    flex-direction: column;
+  }
+  
+  .cta-buttons button {
+    width: 100%;
+  }
+  
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Print Styles */
