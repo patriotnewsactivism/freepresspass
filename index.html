@@ -3,33 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Get your free press pass for events. Perfect for journalists, bloggers, and media representatives.">
+  <meta name="description" content="Generate your free digital press pass for journalism activities. Get recognized under First Amendment protections with our Constitutional Press accreditation.">
   <meta name="keywords" content="press pass, journalist credentials, media accreditation, first amendment, freedom of press, constitutional press, investigative journalist">
-  <meta name="author" content="Free Press Pass">
+  <meta name="author" content="Constitutional Press Association">
   
   <!-- Open Graph / Social Media Meta Tags -->
-  <meta property="og:title" content="Free Press Pass - Get Your Press Pass for Events">
-  <meta property="og:description" content="Get your free press pass for events. Perfect for journalists, bloggers, and media representatives.">
+  <meta property="og:title" content="Free Press Pass Generator">
+  <meta property="og:description" content="Generate your free digital press pass for journalism activities. Get recognized under First Amendment protections.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://freepresspass.example.com">
-  <meta property="og:image" content="https://freepresspass.example.com/assets/press-pass-preview.jpg">
+  <meta property="og:url" content="https://freepresspass.com">
+  <meta property="og:image" content="/assets/press-pass-preview.jpg">
   
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Free Press Pass - Get Your Press Pass for Events">
-  <meta name="twitter:description" content="Get your free press pass for events. Perfect for journalists, bloggers, and media representatives.">
-  <meta name="twitter:image" content="https://freepresspass.example.com/assets/press-pass-preview.jpg">
+  <meta name="twitter:title" content="Free Press Pass Generator">
+  <meta name="twitter:description" content="Generate your free digital press pass for journalism activities. Get recognized under First Amendment protections.">
+  <meta name="twitter:image" content="/assets/press-pass-preview.jpg">
   
-  <title>Free Press Pass - Get Your Press Pass for Events</title>
+  <title>Free Press Pass Generator | First Amendment Journalist Credentials</title>
   <link rel="stylesheet" href="styles.css">
 <script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
   <!-- Structured Data for SEO -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Free Press Pass",
-    "url": "https://freepresspass.example.com/"
+    "@type": "WebApplication",
+    "name": "Free Press Pass Generator",
+    "description": "Generate your digital press pass for journalism activities. Get recognized under First Amendment protections with our Constitutional Press accreditation.",
+    "url": "https://freepresspass.com",
+    "applicationCategory": "Government",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
   }
   </script>
   
@@ -45,14 +53,19 @@
 <body>
   <header>
     <!-- Main heading for the site: display FREE PRESS PASS instead of Constitutional Press -->
-    <h1>Free Press Pass</h1>
+    <h1>FREE PRESS PASS</h1>
   </header>
 
   <!-- Tagline and YouTube channel links section.  This section sits directly under
        the header and explains who sponsors the generator.  It also links out to
        the official YouTube channels for Leroy Truth Investigations and The Exposure Report. -->
   <section class="tagline-section">
-    <p>Get your press pass for events in seconds</p>
+    <p>This press pass generator is brought to you by <strong>Leroy Truth Investigations</strong> and <strong>The Exposure Report</strong>.</p>
+    <div class="channel-links">
+      <a href="https://www.youtube.com/@leroytruth" target="_blank" rel="noopener noreferrer">Leroy Truth Investigations on YouTube</a>
+      <span class="separator">&nbsp;|&nbsp;</span>
+      <a href="https://www.youtube.com/@theexposurereport" target="_blank" rel="noopener noreferrer">The Exposure Report on YouTube</a>
+    </div>
   </section>
   
   <main role="main">
@@ -74,6 +87,12 @@
           <div class="form-group">
             <label for="title">Title:</label>
             <input type="text" id="title" name="title" value="Investigative Journalist" required>
+          </div>
+
+          <!-- Email address input for tracking passes -->
+          <div class="form-group">
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" required>
           </div>
           
           <div class="form-group">
@@ -97,64 +116,54 @@
           <button id="openImage">Open Image</button>
         </div>
       </div>
-      
-      <div class="hero-image">
-        <img src="assets/press-pass-preview.jpg" alt="Press pass preview">
-      </div>
     </div>
 
     <!-- Courtesy section below preview -->
     <section class="courtesy-section">
-      <h2>Why Free Press Pass?</h2>
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h3>Instant Access</h3>
-          <p>Get your press pass immediately after checkout without waiting for physical delivery.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Professional Design</h3>
-          <p>Our press passes feature a professional design accepted at events worldwide.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Reusable</h3>
-          <p>Use the same pass for multiple events. Just print it whenever you need it.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Free of Charge</h3>
-          <p>Completely free for verified members of the press. Event organizers cover the cost.</p>
-        </div>
+      <h2>Courtesy of Leroy Truth Investigations and The Exposure Report</h2>
+      <p>Dedicated to the pursuit of truth and the protection of constitutional freedoms</p>
+    </section>
+
+    <!-- Follow our journalism section with channel links -->
+    <section class="follow-section">
+      <!-- Removed the visible heading inside the follow section to simplify styling. The section is self-explanatory through the buttons. -->
+      <div class="follow-buttons">
+        <a href="https://www.youtube.com/@leroytruth" target="_blank" rel="noopener noreferrer">📺 Leroy Truth Investigations</a>
+        <a href="https://www.youtube.com/@theexposurereport" target="_blank" rel="noopener noreferrer">🎙️ The Exposure Report</a>
       </div>
     </section>
 
-    <section class="follow-section">
-      <h2>How It Works</h2>
-      <ol>
-        <li>Click "Get Your Free Press Pass" button</li>
-        <li>Verify your press credentials through Stripe</li>
-        <li>Receive your pass via email immediately</li>
-        <li>Print and bring to events</li>
-      </ol>
-    </section>
-
+    <!-- Informational section explaining press and journalism, journalist definition, First Amendment protection, and constitutional foundation -->
     <section class="info-section">
-      <h2>Why Free Press Pass?</h2>
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h3>Instant Access</h3>
-          <p>Get your press pass immediately after checkout without waiting for physical delivery.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Professional Design</h3>
-          <p>Our press passes feature a professional design accepted at events worldwide.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Reusable</h3>
-          <p>Use the same pass for multiple events. Just print it whenever you need it.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Free of Charge</h3>
-          <p>Completely free for verified members of the press. Event organizers cover the cost.</p>
-        </div>
+      <div class="info-card">
+        <h3>📰 What Is Press &amp; Journalism?</h3>
+        <h4>📽️ Definition of "Press"</h4>
+        <p><strong>The Press</strong> refers to news media organizations, journalists, and individuals who gather, verify, and disseminate information to the public. This includes traditional newspapers, television news, radio journalism, digital publications, independent journalists, bloggers, podcasters, and citizen journalists who report on matters of public interest.</p>
+        <p>The press serves as a crucial check on government power and provides citizens with the information necessary for democratic participation. The term encompasses both institutional media organizations and individual journalists working independently.</p>
+      </div>
+      <div class="info-card">
+        <h3>🧑‍💼 Definition of "Journalist"</h3>
+        <p><strong>A Journalist</strong> is any person who regularly gathers, writes, edits, or disseminates news or information to the public. This includes:</p>
+        <ul>
+          <li><strong>Traditional journalists</strong> employed by newspapers, magazines, television, or radio stations</li>
+          <li><strong>Freelance reporters</strong> who contribute to multiple publications</li>
+          <li><strong>Independent journalists</strong> who publish through their own platforms</li>
+          <li><strong>Citizen journalists</strong> who report on events in their communities</li>
+          <li><strong>Bloggers and podcasters</strong> who regularly cover news and current events</li>
+          <li><strong>Documentary filmmakers</strong> who investigate and report on issues of public concern</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>⚖️ First Amendment Protection</h3>
+        <p>The First Amendment to the U.S. Constitution protects freedom of the press without requiring journalists to have special licenses, credentials, or formal training. <strong>Any person engaged in gathering and disseminating news to the public is entitled to press protections under the Constitution.</strong></p>
+        <p>Courts have consistently ruled that press freedom is not limited to traditional media outlets or credentialed journalists. The digital age has democratized journalism, and constitutional protections extend to all who perform the essential function of informing the public.</p>
+      </div>
+      <div class="info-card">
+        <h3>🏛️ Constitutional Foundation</h3>
+        <p>In recognition of the fundamental principle enshrined in the First Amendment of the United States Constitution, which guarantees that "Congress shall make no law… abridging the freedom of speech, or of the press," this initiative seeks to protect and empower independent journalists in their vital role as guardians of democracy.</p>
+        <p>The Press Pass represents more than mere identification; it embodies the constitutional covenant between a free society and those who dedicate themselves to the pursuit of truth, the documentation of events, and the preservation of the historical record.</p>
+        <h4>🎯 Our Mission</h4>
+        <p>We believe that every citizen has the right to seek, receive, and share information. This press credential supports that fundamental right by providing independent journalists with a visible symbol of their constitutional protections. A robust and free press is essential to holding power accountable and ensuring an informed public.</p>
       </div>
     </section>
 
@@ -164,7 +173,7 @@
       <h2>Frequently Asked Questions</h2>
       <div class="faq-item">
         <h3>Is this press pass legally valid?</h3>
-        <p>This digital press pass recognizes your rights under the First Amendment of the U.S. Constitution. While it doesn't replace official media credentials, it serves as a statement of your constitutional protections as a journalist.</p>
+        <p>This digital press pass recognizes your rights under the First Amendment of the U宪法. While it doesn't replace official media credentials, it serves as a statement of your constitutional protections as a journalist.</p>
       </div>
       <div class="faq-item">
         <h3>How do I use this press pass?</h3>
@@ -182,28 +191,43 @@
     
     <div class="disclaimers">
       <h2>Legal Disclaimers</h2>
-      <p>This digital press pass recognizes your rights under the First Amendment of the U.S. Constitution. While it serves as a statement of those protections, it does not replace official media credentials or provide legal immunity. The Free Press Pass is not liable for any legal issues that may arise from the use of this pass.</p>
+      <p>This digital press pass recognizes your rights under the First Amendment of the U.S. Constitution. While it serves as a statement of those protections, it does not replace official media credentials or provide legal immunity. The Constitutional Press Association is not liable for any legal issues that may arise from the use of this pass.</p>
       <p>For physical laminated passes, please note that they are provided as a convenience and do not confer additional legal protections beyond those of the digital version.</p>
     </div>
     
-    <div class="testimonials">
-      <h2>What Journalists Are Saying</h2>
-      <div class="testimonial">
-        <p>"The Free Press Pass helped me assert my rights when covering a protest. Law enforcement respected my credential and allowed me to do my job."</p>
-        <p class="testimonial-author">— Sarah Johnson, Independent Journalist</p>
-      </div>
-      <div class="testimonial">
-        <p>"As a citizen reporter, this pass gives me the confidence to cover local government meetings knowing my First Amendment rights are recognized."</p>
-        <p class="testimonial-author">— Michael Torres, Community News</p>
-      </div>
+    <!-- Testimonial section removed per user request -->
+    
+    <!-- Removed the Contact Us section per user request -->
+    <!--
+    <div class="contact">
+      <h2>Contact Us</h2>
+      <p>Have questions about your press pass or First Amendment rights? Reach out to us:</p>
+      <p>Email: info@constitutionalpress.org</p>
+      <p>For legal inquiries: legal@constitutionalpress.org</p>
     </div>
+    -->
     
     <footer>
-      <p>&copy; 2025 Free Press Pass. All rights reserved.</p>
-      <p>For event organizers: <a href="#">Learn more about our service</a></p>
-      <p>Admin access: <a href="login.html">Login to admin panel</a></p>
+      <p>This journalist is recognized under the protections of the First Amendment of the U.S. Constitution. Any interference will be a violation of federal law.</p>
+      <p>Do not hinder, exclude, or block the view of this journalist in the exercise of court-recognized First Amendment rights.</p>
     </footer>
     
+    <div class="how-it-works">
+      <h2>How It Works</h2>
+      <ol>
+        <li>Fill in your name and title in the form above</li>
+        <li>Add a photo (optional but recommended)</li>
+        <li>Click "Generate Press Pass" to create your digital credential</li>
+        <li>Download the pass or open it on mobile devices</li>
+        <li>Present your pass when engaging in journalism activities</li>
+      </ol>
+    </div>
+    
+    <div class="about-section">
+      <h2>About Constitutional Press</h2>
+      <p>The Constitutional Press Association is dedicated to protecting and promoting First Amendment rights for all journalists, from professionals to citizen reporters. Our press pass serves as a tool to assert these constitutional protections.</p>
+    </div>
+  
   <script>
     // Canvas rendering
     const canvas = document.getElementById('passCanvas');
@@ -216,7 +240,7 @@
     
     // Get brand name
     function brandName() {
-      return 'FREE PRESS PASS';
+      return 'CONSTITUTIONAL PRESS ASSOCIATION';
     }
     
     // Debounce function for performance optimization
@@ -280,13 +304,13 @@
       // Subheading under the header bar
       ctx.fillStyle = '#2c3e50';
       ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
-      ctx.fillText('FREE PRESS', canvas.width / 2, 5 + headerHeight + 28);
+      ctx.fillText('CONSTITUTIONAL PRESS', canvas.width / 2, 5 + headerHeight + 28);
 
       // Dimensions for photo and right-hand column
       const photoX = 25;
       // Position the photo area below the header and subheading.  This ensures
       // adequate spacing between the red bar and the credential content.  The
-      // y-coordinate accounts for the 5px padding, 60px header, subheading and
+      // y‑coordinate accounts for the 5px padding, 60px header, subheading and
       // an extra margin of 20px.
       const photoY = 140;
       const photoW = 150;
@@ -305,7 +329,7 @@
       if (photoInput.files && photoInput.files[0]) {
         const previewImage = document.getElementById('preview-image');
         if (previewImage.src) {
-          // In this simplified implementation we don't render the actual image,
+          // In this simplified implementation we don’t render the actual image,
           // but we indicate that a photo has been added.
           ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
           ctx.fillText('PHOTO ADDED', photoX + photoW / 2, photoY + photoH / 2);
@@ -370,7 +394,7 @@
       ctx.fillText('ISSUED BY', canvas.width / 2, baseY);
       baseY += 16;
       ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
-      ctx.fillText('FREE PRESS PASS', canvas.width / 2, baseY);
+      ctx.fillText('CONSTITUTIONAL PRESS ASSOCIATION', canvas.width / 2, baseY);
       baseY += 18;
       // Expiration date (always end of next 2 years)
       const expDate = new Date(new Date().getFullYear() + 2, 11, 31);
@@ -398,7 +422,7 @@
       ctx.font = 'bold 10px "Helvetica", Arial, sans-serif';
       const noteLines = [
         'Do not hinder, exclude, or block the view of this journalist',
-        'in the exercise of court-recognized First Amendment rights.'
+        'in the exercise of court‑recognized First Amendment rights.'
       ];
       noteLines.forEach((t, i) => {
         ctx.fillText(t, canvas.width / 2, baseY + i * 14);
@@ -441,29 +465,19 @@
     document.getElementById('generate').addEventListener('click', () => {
       const name = document.getElementById('name').value;
       const title = document.getElementById('title').value;
-      const email = prompt("Please enter your email address:");
+      drawPass(name, title);
       
-      if (email) {
-        drawPass(name, title);
-        
-        // Track the issued pass in our database
-        const passData = {
-          name: name,
-          title: title,
-          email: email
-        };
-        
-        // In a real implementation, this would be an API call to the server
-        // For this prototype, we're using localStorage
-        const db = window.localStorage;
-        const passes = JSON.parse(db.getItem('pressPasses') || '[]');
-        passes.push({
-          ...passData,
-          id: 'FP-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
-          createdAt: new Date().toISOString()
-        });
-        db.setItem('pressPasses', JSON.stringify(passes));
-      }
+      // Track the issued pass
+      const formData = new FormData();
+      formData.append('form-name', 'press-passes');
+      formData.append('name', name);
+      formData.append('title', title);
+      formData.append('issued-at', new Date().toISOString());
+      
+      fetch('/', {
+        method: 'POST',
+        body: formData
+      });
     });
     
     // Download functionality
@@ -513,6 +527,31 @@
     
     // Initialize with a sample pass
     drawPass('YOUR NAME HERE', 'Investigative Journalist');
+  </script>
+
+  <!-- Module script to handle press pass generation and tracking -->
+  <script type="module">
+    import { trackPass } from './api.js';
+    // Attach an event listener to the Generate button that creates the pass image and records it in Supabase.
+    document.getElementById('generate').addEventListener('click', async () => {
+      const nameInput = document.getElementById('name').value;
+      const titleInput = document.getElementById('title').value;
+      const emailInput = document.getElementById('email').value;
+      const passNumber = genPassId();
+      // Render the pass preview
+      drawPass(nameInput, titleInput);
+      // Persist the generated pass details to the backend
+      try {
+        await trackPass({
+          name: nameInput,
+          title: titleInput,
+          email: emailInput,
+          pass_number: passNumber
+        });
+      } catch (err) {
+        console.error('Error tracking press pass:', err);
+      }
+    });
   </script>
 </body>
 </html>

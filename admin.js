@@ -1,80 +1,72 @@
-// Admin panel functionality
-import db from './db.js';
+// Admin dashboard logic.  This module is responsible for displaying
+// statistics and press pass data to authenticated administrators.
 
-// Check if user is authenticated
-function checkAuth() {
-  const isAuthenticated = sessionStorage.getItem('authenticated') === 'true';
-  if (!isAuthenticated) {
-    window.location.href = 'login.html';
-  }
-}
+import { fetchPasses } from './api.js';
 
-// Logout function
-function logout() {
-  sessionStorage.removeItem('authenticated');
-  window.location.href = 'login.html';
-}
-
-// Populate passes table
-function populatePassesTable() {
-  const tableBody = document.getElementById('passesTableBody');
-  const passes = db.getAllPasses();
-  
-  // Clear existing table content
-  tableBody.innerHTML = '';
-  
-  // Add each pass as a row in the table
-  passes.forEach(pass => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${pass.name}</td>
-      <td>${pass.email}</td>
-      <td>${pass.id}</td>
-      <td>${new Date(pass.createdAt).toLocaleDateString()}</td>
-      <td>
-        <button onclick="viewPass('${pass.id}')" style="margin-right: 5px;">View</button>
-        <button onclick="deletePass('${pass.id}')" style="background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Delete</button>
-      </td>
-    `;
-    tableBody.appendChild(row);
+/**
+ * Format a JavaScript Date into a human‑readable string.
+ *
+ * @param {string|Date} dateStr
+ * @returns {string}
+ */
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
   });
-  
-  // Update statistics
-  document.getElementById('totalPasses').textContent = db.getPassesCount();
-  document.getElementById('monthlyPasses').textContent = db.getMonthlyPasses().length;
-  document.getElementById('emailDomains').textContent = db.getUniqueEmailDomains().length;
 }
 
-// View pass function
-function viewPass(passId) {
-  const pass = db.getPassById(passId);
-  if (pass) {
-    alert(`Pass Details:\nName: ${pass.name}\nEmail: ${pass.email}\nPass ID: ${pass.id}\nGenerated: ${new Date(pass.createdAt).toLocaleString()}`);
-  } else {
-    alert('Pass not found');
+document.addEventListener('DOMContentLoaded', async () => {
+  // Redirect unauthenticated users to the login page
+  if (localStorage.getItem('adminLoggedIn') !== 'true') {
+    window.location.href = 'login.html';
+    return;
   }
-}
 
-// Delete pass function
-function deletePass(passId) {
-  if (confirm(`Are you sure you want to delete pass ${passId}?`)) {
-    db.deletePassById(passId);
-    populatePassesTable(); // Refresh the table
-  }
-}
+  // Logout handler
+  document.getElementById('logout').addEventListener('click', () => {
+    localStorage.removeItem('adminLoggedIn');
+    window.location.href = 'login.html';
+  });
 
-// Initialize admin panel
-document.addEventListener('DOMContentLoaded', function() {
-  checkAuth();
-  populatePassesTable();
-  
-  // Attach logout function to logout button
-  const logoutBtn = document.querySelector('.logout-btn');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', logout);
+  try {
+    const passes = await fetchPasses();
+    const tbody = document.querySelector('#passesTable tbody');
+    let total = 0;
+    let monthly = 0;
+    const domains = new Set();
+    const now = new Date();
+
+    passes.forEach((pass) => {
+      total += 1;
+      const issuedDate = new Date(pass.created_at || pass.issued_on || pass.created_at);
+      if (
+        issuedDate.getFullYear() === now.getFullYear() &&
+        issuedDate.getMonth() === now.getMonth()
+      ) {
+        monthly += 1;
+      }
+      const domain = (pass.email || '').split('@')[1];
+      if (domain) domains.add(domain);
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${pass.name || ''}</td>
+        <td>${pass.email || ''}</td>
+        <td>${pass.title || ''}</td>
+        <td>${pass.pass_number || ''}</td>
+        <td>${formatDate(pass.created_at || pass.issued_on)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+    document.getElementById('totalPasses').textContent = `Total Passes: ${total}`;
+    document.getElementById('monthlyPasses').textContent = `Passes This Month: ${monthly}`;
+    document.getElementById('uniqueEmails').textContent = `Unique Email Domains: ${domains.size}`;
+  } catch (err) {
+    console.error('Error loading passes:', err);
   }
 });
-
-// Make functions available globally for inline event handlers
-window.viewPass = viewPass;
-window.deletePass = deletePass;

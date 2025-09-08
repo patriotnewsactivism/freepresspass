@@ -1,147 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - FreePressPass</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
-        
-        .admin-header {
-            background-color: #333;
-            color: white;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .admin-container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-        
-        .admin-panel {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 2rem;
-        }
-        
-        .pass-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        
-        .pass-table th, .pass-table td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .pass-table th {
-            background-color: #f8f9fa;
-            font-weight: bold;
-        }
-        
-        .pass-table tr:hover {
-            background-color: #f5f5f5;
-        }
-        
-        .logout-btn {
-            background-color: #dc3545;
-            color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        
-        .logout-btn:hover {
-            background-color: #c82333;
-        }
-        
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .stat-card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 1.5rem;
-            text-align: center;
-        }
-        
-        .stat-card h3 {
-            margin-top: 0;
-            color: #666;
-        }
-        
-        .stat-card .value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #007bff;
-        }
-    </style>
-<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Free Press Pass</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header class="admin-header">
-        <h1>FreePressPass Admin Panel</h1>
-        <button class="logout-btn" onclick="logout()">Logout</button>
-    </header>
-    
-    <div class="admin-container">
-        <div class="admin-panel">
-            <h2>Press Pass Management</h2>
-            
-            <div class="stats-container">
-                <div class="stat-card">
-                    <h3>Total Passes Generated</h3>
-                    <div class="value" id="totalPasses">0</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Passes This Month</h3>
-                    <div class="value" id="monthlyPasses">0</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Unique Email Domains</h3>
-                    <div class="value" id="emailDomains">0</div>
-                </div>
-            </div>
-            
-            <table class="pass-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Pass Number</th>
-                        <th>Generated Date</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="passesTableBody">
-                    <!-- Pass data will be populated here by JavaScript -->
-                </tbody>
-            </table>
-        </div>
-    </div>
+  <header>
+    <h1>Admin Dashboard</h1>
+    <button id="logout" class="logout-button">Logout</button>
+  </header>
 
-    <script type="module">
-        // Import the admin functionality
-        import './admin.js';
-    </script>
+  <main>
+    <section class="stats">
+      <h2>Statistics</h2>
+      <p id="totalPasses">Total Passes: 0</p>
+      <p id="monthlyPasses">Passes This Month: 0</p>
+      <p id="uniqueEmails">Unique Email Domains: 0</p>
+    </section>
+
+    <section class="passes-table">
+      <h2>Issued Press Passes</h2>
+      <table id="passesTable" class="pass-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Title</th>
+            <th>Pass Number</th>
+            <th>Date Issued</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script type="module" src="admin.js"></script>
 </body>
 </html>
