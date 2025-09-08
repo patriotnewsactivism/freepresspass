@@ -52,7 +52,18 @@
 </head>
 <body>
   <header>
-    <h1>Constitutional Press</h1>
+    <h1>FREE PRESS PASS</h1>
+    <p class="subtitle">This press pass generator is brought to you by Leroy Truth Investigations and The Exposure Report</p>
+    <div class="youtube-channels">
+      <a href="https://www.youtube.com/@LeroyTruthInvestigations" target="_blank" class="youtube-channel">
+        <img src="assets/youtube-icon.png" alt="YouTube Icon">
+        <span>Leroy Truth Investigations</span>
+      </a>
+      <a href="https://www.youtube.com/@TheExposureReport" target="_blank" class="youtube-channel">
+        <img src="assets/youtube-icon.png" alt="YouTube Icon">
+        <span>The Exposure Report</span>
+      </a>
+    </div>
   </header>
   
   <main role="main">
@@ -68,12 +79,18 @@
           <input type="hidden" name="form-name" value="press-passes" />
           <div class="form-group">
             <label for="name">Full Name:</label>
-            <input type="text" id="name" name="name" required>
+            <input type="text" id="name" name="name" placeholder="Enter your full name" required>
           </div>
           
           <div class="form-group">
             <label for="title">Title:</label>
-            <input type="text" id="title" name="title" value="Investigative Journalist" required>
+            <select id="title" name="title" required>
+              <option value="Independent Journalist" selected>Independent Journalist</option>
+              <option value="Investigative Journalist">Investigative Journalist</option>
+              <option value="Field Reporter">Field Reporter</option>
+              <option value="Photojournalist">Photojournalist</option>
+              <option value="Video Journalist">Video Journalist</option>
+            </select>
           </div>
           
           <div class="form-group">
@@ -82,6 +99,7 @@
             <div id="photo-preview" style="display:none; margin-top: 1rem;">
               <img id="preview-image" src="" alt="Press pass photo preview" style="max-width: 100%; max-height: 200px;">
             </div>
+            <p class="photo-tip">For best results, use a square photo with your face centered</p>
           </div>
           
           <button type="button" id="generate">Generate Press Pass</button>
@@ -91,7 +109,7 @@
       
       <div class="preview-section">
         <h2>Press Pass Preview</h2>
-        <canvas id="passCanvas" width="400" height="600"></canvas>
+        <canvas id="passCanvas" width="350" height="600"></canvas>
         <div class="actions">
           <button id="download">Download</button>
           <button id="openImage">Open Image</button>
@@ -183,7 +201,7 @@
     
     // Get brand name
     function brandName() {
-      return 'CONSTITUTIONAL PRESS ASSOCIATION';
+      return 'CONSTITUTIONAL PRESS';
     }
     
     // Debounce function for performance optimization
@@ -205,97 +223,109 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       // Background
-      ctx.fillStyle = '#f8f9fa';
+      ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
       // Draw border
-      ctx.strokeStyle = '#2c3e50';
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 2;
       ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
       
-      // Header
-      const headerHeight = 80;
-      ctx.fillStyle = '#dc143c';
-      ctx.fillRect(0, 0, canvas.width, headerHeight);
+      // Based on the image, the press pass is in vertical orientation
+      // We'll start from the bottom since the image is upside down
       
-      // Header text
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 24px "Helvetica", Arial, sans-serif';
+      // Press Credential text at bottom (which is actually the top in the image)
+      ctx.fillStyle = '#003366';
+      ctx.font = 'bold 36px "Arial", sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('PRESS PASS', canvas.width/2, 35);
+      ctx.fillText('PRESS', canvas.width/2, 550);
+      ctx.fillText('CREDENTIAL', canvas.width/2, 590);
       
-      // Photo placeholder or actual photo
+      // Free Constitutional Press text
+      ctx.font = 'bold 20px "Arial", sans-serif';
+      ctx.fillText('CONSTITUTIONAL PRESS', canvas.width/2, 520);
+      
+      // Logo at the bottom
+      // In a real implementation, we would draw the actual logo
+      ctx.beginPath();
+      ctx.arc(canvas.width/2, 480, 30, 0, Math.PI * 2);
+      ctx.fillStyle = '#003366';
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      
+      // Full Court Press Media
+      ctx.fillStyle = '#003366';
+      ctx.font = 'bold 24px "Arial", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('FULL COURT PRESS MEDIA', canvas.width/2, 400);
+      
+      // Independent Journalist
+      ctx.save();
+      ctx.translate(canvas.width/2, 350);
+      ctx.rotate(Math.PI/2);
+      ctx.font = 'bold 20px "Arial", sans-serif';
+      ctx.fillText('INDEPENDENT', 0, -100);
+      ctx.fillText('JOURNALIST', 0, -75);
+      ctx.restore();
+      
+      // Photo area
+      const photoSize = 150;
+      const photoX = (canvas.width - photoSize) / 2;
+      const photoY = 180;
       ctx.fillStyle = '#e9ecef';
-      ctx.fillRect(20, 100, canvas.width - 40, 250);
+      ctx.fillRect(photoX, photoY, photoSize, photoSize);
       
       const photoInput = document.getElementById('photo');
       if (photoInput.files && photoInput.files[0]) {
         const previewImage = document.getElementById('preview-image');
         if (previewImage.src) {
-          // In a real implementation, we would draw the actual image on the canvas
-          // For this placeholder implementation, we'll just show the preview exists
           ctx.fillStyle = '#2c3e50';
-          ctx.font = '18px "Helvetica", Arial, sans-serif';
+          ctx.font = '18px "Arial", sans-serif';
           ctx.textAlign = 'center';
-          ctx.fillText('PHOTO ADDED', canvas.width/2, 225);
+          ctx.fillText('PHOTO ADDED', canvas.width/2, photoY + photoSize/2);
         }
       } else {
         ctx.fillStyle = '#2c3e50';
-        ctx.font = '18px "Helvetica", Arial, sans-serif';
+        ctx.font = '18px "Arial", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('PHOTO AREA', canvas.width/2, 225);
+        ctx.fillText('PHOTO AREA', canvas.width/2, photoY + photoSize/2);
       }
       
-      // Name and title
-      const orgY = 370;
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#2c3e50';
-      ctx.font = 'bold 32px "Helvetica", Arial, sans-serif';
-      ctx.fillText(name || 'YOUR NAME HERE', canvas.width/2, orgY);
-      
-      const startRightY = orgY + 70;
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#2c3e50';
-      ctx.font = 'bold 32px "Helvetica", Arial, sans-serif';
-      ctx.fillText(brandName(), canvas.width/2, startRightY);
-      ctx.font = 'bold 24px "Helvetica", Arial, sans-serif';
-      ctx.fillText(title, canvas.width/2, startRightY + 35);
-      
-      // Bottom metadata
+      // ID and other details
       const id = genPassId();
-      ctx.font = 'bold 18px "Helvetica", Arial, sans-serif';
-      ctx.fillText('FULL COURT PRESS MEDIA', canvas.width/2, startRightY + 80);
-      ctx.font = '14px "Helvetica", Arial, sans-serif';
-      ctx.fillText(`ID: ${id}`, canvas.width/2, startRightY + 105);
-      ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
-      ctx.fillText('ISSUED BY', canvas.width/2, startRightY + 130);
-      ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
-      ctx.fillText('CONSTITUTIONAL PRESS ASSOCIATION', canvas.width/2, startRightY + 145);
+      ctx.fillStyle = '#003366';
+      ctx.font = 'bold 18px "Arial", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`ID: FCP-${id}`, canvas.width/2, 150);
+      
+      ctx.font = 'bold 16px "Arial", sans-serif';
+      ctx.fillText('ISSUED BY', canvas.width/2, 100);
+      ctx.fillText('CONSTITUTIONAL PRESS ASSOCIATION', canvas.width/2, 120);
       
       const exp = new Date(new Date().getFullYear() + 2, 11, 31);
-      ctx.fillStyle = '#dc143c';
-      ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
-      ctx.fillText(`VALID THROUGH DEC 31, ${exp.getFullYear()}`, canvas.width/2, startRightY + 170);
+      ctx.fillText(`VALID THROUGH DEC 31, ${exp.getFullYear()}`, canvas.width/2, 80);
       
-      // Legal lines
-      ctx.fillStyle = '#1a252f';
-      ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
-      const legalY = startRightY + 200;
-      const lines = [
+      // Name at the top (which is actually at the bottom in the image)
+      ctx.font = 'bold 28px "Arial", sans-serif';
+      ctx.fillText(name || 'YOUR NAME HERE', canvas.width/2, 40);
+      
+      // Legal text
+      ctx.save();
+      ctx.translate(canvas.width/2, 350);
+      ctx.rotate(Math.PI);
+      ctx.font = 'bold 8px "Arial", sans-serif';
+      ctx.textAlign = 'center';
+      const legalLines = [
         'THIS JOURNALIST IS RECOGNIZED UNDER THE PROTECTIONS',
         'OF THE FIRST AMENDMENT OF THE U.S. CONSTITUTION.',
-        'ANY INTERFERENCE WILL BE A VIOLATION OF FEDERAL LAW.'
+        'ANY INTERFERENCE MAY BE A VIOLATION OF FEDERAL LAW.'
       ];
-      lines.forEach((t, i) => ctx.fillText(t, canvas.width/2, legalY + i*17));
-      
-      ctx.fillStyle = '#2c3e50';
-      ctx.font = 'bold 11px "Helvetica", Arial, sans-serif';
-      const addY = legalY + 70;
-      const notes = [
-        'Do not hinder, exclude, or block the view of this journalist',
-        'in the exercise of court‑recognized First Amendment rights.'
-      ];
-      notes.forEach((t, i) => ctx.fillText(t, canvas.width/2, addY + i*16));
+      legalLines.forEach((line, i) => {
+        ctx.fillText(line, 0, -200 + (i * 12));
+      });
+      ctx.restore();
       
       return id;
     }

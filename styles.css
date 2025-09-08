@@ -16,13 +16,45 @@ header {
   background-color: #dc143c;
   color: white;
   text-align: center;
-  padding: 1rem;
+  padding: 1.5rem;
   margin-bottom: 2rem;
 }
 
 header h1 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+header .subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.youtube-channels {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.youtube-channel {
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+
+.youtube-channel:hover {
+  transform: scale(1.05);
+}
+
+.youtube-channel img {
+  width: 24px;
+  height: 24px;
+  margin-right: 0.5rem;
 }
 
 .container {
@@ -60,12 +92,19 @@ header h1 {
   font-weight: bold;
 }
 
-.form-group input {
+.form-group input, .form-group select {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
+}
+
+.photo-tip {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.5rem;
+  font-style: italic;
 }
 
 button {
@@ -95,9 +134,10 @@ button:hover {
 
 #passCanvas {
   width: 100%;
-  max-width: 400px;
+  max-width: 350px;
   border: 1px solid #ddd;
   margin-bottom: 1rem;
+  background-color: #ffffff;
 }
 
 .actions {
