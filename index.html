@@ -260,7 +260,7 @@
     // after a traditional laminated credential with a large photo on the left,
     // a bold vertical brand on the right and important metadata below.  Text
     // measurements are adjusted to avoid overruns beyond the canvas margins.
-    function drawPass(name, title) {
+    function drawPass(name, title, photoSrc = null) {
       // Normalize inputs and provide defaults
       const displayName = name && name.trim() ? name.trim() : 'YOUR NAME HERE';
       const displayTitle = title && title.trim() ? title.trim() : 'INDEPENDENT JOURNALIST';
@@ -318,23 +318,21 @@
       const rightX = photoX + photoW + 20;
       const rightW = canvas.width - rightX - 25;
 
-      // Photo placeholder rectangle
+      // Photo area: draw border and either the supplied image or a placeholder label.
       ctx.strokeStyle = '#2c3e50';
       ctx.lineWidth = 2;
       ctx.strokeRect(photoX, photoY, photoW, photoH);
-      // If a photo is provided, indicate it; otherwise show placeholder text.
-      const photoInput = document.getElementById('photo');
       ctx.fillStyle = '#2c3e50';
       ctx.textAlign = 'center';
-      if (photoInput.files && photoInput.files[0]) {
-        const previewImage = document.getElementById('preview-image');
-        if (previewImage.src) {
-          // In this simplified implementation we don’t render the actual image,
-          // but we indicate that a photo has been added.
-          ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
-          ctx.fillText('PHOTO ADDED', photoX + photoW / 2, photoY + photoH / 2);
-        }
+      if (photoSrc) {
+        // Asynchronously load and draw the supplied photo onto the canvas.
+        const img = new Image();
+        img.onload = function() {
+          ctx.drawImage(img, photoX, photoY, photoW, photoH);
+        };
+        img.src = photoSrc;
       } else {
+        // When no photo is provided, display a simple placeholder label.
         ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
         ctx.fillText('PHOTO', photoX + photoW / 2, photoY + photoH / 2);
       }
@@ -461,24 +459,7 @@
       }
     });
     
-    // Generate pass when button is clicked
-    document.getElementById('generate').addEventListener('click', () => {
-      const name = document.getElementById('name').value;
-      const title = document.getElementById('title').value;
-      drawPass(name, title);
-      
-      // Track the issued pass
-      const formData = new FormData();
-      formData.append('form-name', 'press-passes');
-      formData.append('name', name);
-      formData.append('title', title);
-      formData.append('issued-at', new Date().toISOString());
-      
-      fetch('/', {
-        method: 'POST',
-        body: formData
-      });
-    });
+    // (Old Netlify Forms tracking removed. Pass generation and tracking is now handled in the module script.)
     
     // Download functionality
     document.getElementById('download').addEventListener('click', () => {
@@ -538,18 +519,49 @@
       const titleInput = document.getElementById('title').value;
       const emailInput = document.getElementById('email').value;
       const passNumber = genPassId();
-      // Render the pass preview
-      drawPass(nameInput, titleInput);
-      // Persist the generated pass details to the backend
-      try {
-        await trackPass({
+      // Determine if a photo file has been selected.  If so, read it as a data URL
+      // and then draw the pass with the photo once the file has been loaded.
+      const photoInput = document.getElementById('photo');
+      if (photoInput.files && photoInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          // Draw the pass including the uploaded photo
+          drawPass(nameInput, titleInput, e.target.result);
+          // Record the pass details in the backend
+          trackPass({
+            name: nameInput,
+            title: titleInput,
+            email: emailInput,
+            pass_number: passNumber
+          }).catch(err => {
+            console.error('Error tracking press pass:', err);
+          });
+        };
+        reader.onerror = function() {
+          alert('Error reading file. Please try another photo.');
+          // Still draw the pass without a photo if reading fails
+          drawPass(nameInput, titleInput);
+          trackPass({
+            name: nameInput,
+            title: titleInput,
+            email: emailInput,
+            pass_number: passNumber
+          }).catch(err => {
+            console.error('Error tracking press pass:', err);
+          });
+        };
+        reader.readAsDataURL(photoInput.files[0]);
+      } else {
+        // No photo selected: draw the pass with placeholder and record details
+        drawPass(nameInput, titleInput);
+        trackPass({
           name: nameInput,
           title: titleInput,
           email: emailInput,
           pass_number: passNumber
+        }).catch(err => {
+          console.error('Error tracking press pass:', err);
         });
-      } catch (err) {
-        console.error('Error tracking press pass:', err);
       }
     });
   </script>
