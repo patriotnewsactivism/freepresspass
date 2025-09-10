@@ -22,7 +22,7 @@
   
   <title>Free Press Pass Generator | First Amendment Journalist Credentials</title>
   <link rel="stylesheet" href="styles.css">
-<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+  <script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
   <!-- Structured Data for SEO -->
   <script type="application/ld+json">
   {
@@ -103,8 +103,8 @@
             </div>
           </div>
           
-          <button type="button" id="generate">Generate Press Pass</button>
-          <button type="button" id="checkout">Get Laminated Pass ($10-15)</button>
+          <button type="button" id="generate">Generate <strong>FREE</strong> Press Pass Now</button>
+          <button type="button" id="checkout">Enhanced/Laminated Version $15</button>
         </form>
       </div>
       
@@ -173,7 +173,7 @@
       <h2>Frequently Asked Questions</h2>
       <div class="faq-item">
         <h3>Is this press pass legally valid?</h3>
-        <p>This digital press pass recognizes your rights under the First Amendment of the U宪法. While it doesn't replace official media credentials, it serves as a statement of your constitutional protections as a journalist.</p>
+        <p>This digital press pass recognizes your rights under the First Amendment of the U憲法. While it doesn't replace official media credentials, it serves as a statement of your constitutional protections as a journalist.</p>
       </div>
       <div class="faq-item">
         <h3>How do I use this press pass?</h3>
@@ -181,7 +181,7 @@
       </div>
       <div class="faq-item">
         <h3>What's the difference between digital and laminated passes?</h3>
-        <p>The digital pass is free and can be generated instantly. The laminated pass is a physical card that can be purchased for $10-15, which some may find more authoritative when presenting in person.</p>
+        <p>The digital pass is free and can be generated instantly. The laminated pass is a physical card that can be purchased for $15, which some may find more authoritative when presenting in person.</p>
       </div>
       <div class="faq-item">
         <h3>Do I need journalism experience to use this pass?</h3>
@@ -195,18 +195,6 @@
       <p>For physical laminated passes, please note that they are provided as a convenience and do not confer additional legal protections beyond those of the digital version.</p>
     </div>
     
-    <!-- Testimonial section removed per user request -->
-    
-    <!-- Removed the Contact Us section per user request -->
-    <!--
-    <div class="contact">
-      <h2>Contact Us</h2>
-      <p>Have questions about your press pass or First Amendment rights? Reach out to us:</p>
-      <p>Email: info@constitutionalpress.org</p>
-      <p>For legal inquiries: legal@constitutionalpress.org</p>
-    </div>
-    -->
-    
     <footer>
       <p>This journalist is recognized under the protections of the First Amendment of the U.S. Constitution. Any interference will be a violation of federal law.</p>
       <p>Do not hinder, exclude, or block the view of this journalist in the exercise of court-recognized First Amendment rights.</p>
@@ -217,7 +205,7 @@
       <ol>
         <li>Fill in your name and title in the form above</li>
         <li>Add a photo (optional but recommended)</li>
-        <li>Click "Generate Press Pass" to create your digital credential</li>
+        <li>Click "Generate FREE Press Pass Now" to create your digital credential</li>
         <li>Download the pass or open it on mobile devices</li>
         <li>Present your pass when engaging in journalism activities</li>
       </ol>
@@ -459,8 +447,6 @@
       }
     });
     
-    // (Old Netlify Forms tracking removed. Pass generation and tracking is now handled in the module script.)
-    
     // Download functionality
     document.getElementById('download').addEventListener('click', () => {
       const link = document.createElement('a');
@@ -508,6 +494,19 @@
     
     // Initialize with a sample pass
     drawPass('YOUR NAME HERE', 'Investigative Journalist');
+
+    // Add real-time updates for name and title fields
+    document.getElementById('name').addEventListener('input', function() {
+      const nameValue = this.value.trim();
+      const titleValue = document.getElementById('title').value.trim();
+      drawPass(nameValue || 'YOUR NAME HERE', titleValue);
+    });
+
+    document.getElementById('title').addEventListener('input', function() {
+      const nameValue = document.getElementById('name').value.trim();
+      const titleValue = this.value.trim();
+      drawPass(nameValue || 'YOUR NAME HERE', titleValue);
+    });
   </script>
 
   <!-- Module script to handle press pass generation and tracking -->
@@ -532,7 +531,8 @@
             name: nameInput,
             title: titleInput,
             email: emailInput,
-            pass_number: passNumber
+            pass_number: passNumber,
+            organization: 'Full Court Press' // Adding organization field
           }).catch(err => {
             console.error('Error tracking press pass:', err);
           });
@@ -545,7 +545,8 @@
             name: nameInput,
             title: titleInput,
             email: emailInput,
-            pass_number: passNumber
+            pass_number: passNumber,
+            organization: 'Full Court Press' // Adding organization field
           }).catch(err => {
             console.error('Error tracking press pass:', err);
           });
@@ -558,7 +559,8 @@
           name: nameInput,
           title: titleInput,
           email: emailInput,
-          pass_number: passNumber
+          pass_number: passNumber,
+          organization: 'Full Court Press' // Adding organization field
         }).catch(err => {
           console.error('Error tracking press pass:', err);
         });
