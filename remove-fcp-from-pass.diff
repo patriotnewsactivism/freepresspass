@@ -1,0 +1,53 @@
+*** Begin Patch
+*** Update File: index.html
+@@
+-          // Brand lines: FULL / COURT / PRESS.  Use a slightly smaller font
+-          // (24px) and 28px line spacing to conserve vertical space.
+-          ctx.fillStyle = '#2c3e50';
+-          ctx.textAlign = 'center';
+-          ['FULL', 'COURT', 'PRESS'].forEach(word => {
+-            ctx.font = 'bold 24px "Helvetica", Arial, sans-serif';
+-            ctx.fillText(word, rightCenterX, yPos);
+-            yPos += 28;
+-          });
+-          // Small gap before role lines
+-          yPos += 5;
++          // Name lines: split the displayName by spaces to stack the person's name
++          ctx.fillStyle = '#2c3e50';
++          ctx.textAlign = 'center';
++          const nameParts = displayName.toUpperCase().split(' ');
++          nameParts.forEach(part => {
++            ctx.font = 'bold 24px "Helvetica", Arial, sans-serif';
++            ctx.fillText(part, rightCenterX, yPos);
++            yPos += 28;
++          });
++          // Small gap before role lines
++          yPos += 5;
+@@
+-          // Personal name – scale font to fit if needed.  Start with 14px and
+-          // reduce if necessary.  After printing, move down 20px.
+-          const nameFontSize = fitText(displayName.toUpperCase(), 14, rightW - 10);
+-          ctx.font = `bold ${nameFontSize}px "Helvetica", Arial, sans-serif`;
+-          ctx.fillText(displayName.toUpperCase(), rightCenterX, yPos);
+-          yPos += 20;
++          // Personal name already displayed above; skip printing here.
++          yPos += 20;
+@@
+-          // Footer brand line
+-          ctx.textAlign = 'center';
+-          ctx.fillStyle = '#2c3e50';
+-          ctx.font = 'bold 18px "Helvetica", Arial, sans-serif';
+-          ctx.fillText('FULL COURT PRESS MEDIA', canvas.width / 2, baseY);
+-          baseY += 22;
++          // Footer brand line removed.
++          baseY += 22;
+@@
+-            organization: 'Full Court Press' // Adding organization field
++            organization: nameInput // Use the passholder's name instead of the previous organization
+@@
+-            organization: 'Full Court Press' // Adding organization field
++            organization: nameInput // Use the passholder's name instead of the previous organization
+@@
+-          organization: 'Full Court Press' // Adding organization field
++          organization: nameInput // Use the passholder's name instead of the previous organization
+*** End Patch
