@@ -351,12 +351,7 @@
       yPos += 20;
       ctx.fillText('JOURNALIST', rightCenterX, yPos);
       yPos += 20;
-      // Personal name – scale font to fit if needed.  Start with 14px and
-      // reduce if necessary.  After printing, move down 20px.
-      const nameFontSize = fitText(displayName.toUpperCase(), 14, rightW - 10);
-      ctx.font = `bold ${nameFontSize}px "Helvetica", Arial, sans-serif`;
-      ctx.fillText(displayName.toUpperCase(), rightCenterX, yPos);
-      yPos += 20;
+      // Name already drawn in stacked form above
       // Personal title – smaller size (initial 12px) and scaled if long.
       const titleFontSize = fitText(displayTitle, 12, rightW - 10);
       ctx.font = `bold ${titleFontSize}px "Helvetica", Arial, sans-serif`;
@@ -365,11 +360,7 @@
       // Baseline for metadata section
       let baseY = photoY + photoH + 30;
       // Footer brand line
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#2c3e50';
-      ctx.font = 'bold 18px "Helvetica", Arial, sans-serif';
-      ctx.fillText('FULL COURT PRESS MEDIA', canvas.width / 2, baseY);
-      baseY += 22;
+      // footer brand removed per instruction
       // Generate unique ID
       const id = genPassId();
       ctx.font = '14px "Helvetica", Arial, sans-serif';
@@ -569,3 +560,5 @@
   </script>
 </body>
 </html>
+
+
