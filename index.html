@@ -333,13 +333,13 @@
       // offset by a consistent spacing to keep the content within the
       // constrained height.
       let yPos = photoY + 25;
-      // Brand lines: FULL / COURT / PRESS.  Use a slightly smaller font
-      // (24px) and 28px line spacing to conserve vertical space.
+      // Draw the passholder's name, split into stacked lines.
       ctx.fillStyle = '#2c3e50';
       ctx.textAlign = 'center';
-      ['FULL', 'COURT', 'PRESS'].forEach(word => {
+      const nameParts = displayName.toUpperCase().split(/\s+/);
+      nameParts.forEach(part => {
         ctx.font = 'bold 24px "Helvetica", Arial, sans-serif';
-        ctx.fillText(word, rightCenterX, yPos);
+        ctx.fillText(part, rightCenterX, yPos);
         yPos += 28;
       });
       // Small gap before role lines
@@ -351,7 +351,6 @@
       yPos += 20;
       ctx.fillText('JOURNALIST', rightCenterX, yPos);
       yPos += 20;
-      // Name already drawn in stacked form above
       // Personal title – smaller size (initial 12px) and scaled if long.
       const titleFontSize = fitText(displayTitle, 12, rightW - 10);
       ctx.font = `bold ${titleFontSize}px "Helvetica", Arial, sans-serif`;
