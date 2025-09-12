@@ -89,6 +89,11 @@
             <input type="text" id="title" name="title" value="Investigative Journalist" required>
           </div>
 
+          <div class="form-group">
+            <label for="organization">Organization (optional):</label>
+            <input type="text" id="organization" name="organization" placeholder="News Outlet or Company">
+          </div>
+
           <!-- Email address input for tracking passes -->
           <div class="form-group">
             <label for="email">Email Address:</label>
@@ -248,10 +253,11 @@
     // after a traditional laminated credential with a large photo on the left,
     // a bold vertical brand on the right and important metadata below.  Text
     // measurements are adjusted to avoid overruns beyond the canvas margins.
-    function drawPass(name, title, photoSrc = null) {
+    function drawPass(name, title, organization = '', photoSrc = null) {
       // Normalize inputs and provide defaults
       const displayName = name && name.trim() ? name.trim() : 'YOUR NAME HERE';
       const displayTitle = title && title.trim() ? title.trim() : 'INDEPENDENT JOURNALIST';
+      const displayOrg = organization && organization.trim() ? organization.trim() : '';
 
       // Prepare a helper to adjust long strings to fit within a given width.
       // This function will reduce the font size in steps until the text fits.
@@ -275,34 +281,34 @@
       ctx.lineWidth = 3;
       ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
 
+      // Top blank space for lanyard hole
+      const topOffset = 40;
+
       // Top header bar: red background with white text and black stroke
       const headerHeight = 60;
       ctx.fillStyle = '#dc143c';
-      ctx.fillRect(5, 5, canvas.width - 10, headerHeight);
+      ctx.fillRect(5, 5 + topOffset, canvas.width - 10, headerHeight);
       ctx.textAlign = 'center';
       const headerText = 'PRESS CREDENTIAL';
       ctx.font = 'bold 28px "Helvetica", Arial, sans-serif';
       // Draw black stroke for the letters to give contrast
       ctx.strokeStyle = '#1a252f';
       ctx.lineWidth = 2;
-      ctx.strokeText(headerText, canvas.width / 2, 5 + headerHeight / 2 + 10);
+      ctx.strokeText(headerText, canvas.width / 2, 5 + topOffset + headerHeight / 2 + 10);
       ctx.fillStyle = '#ffffff';
-      ctx.fillText(headerText, canvas.width / 2, 5 + headerHeight / 2 + 10);
+      ctx.fillText(headerText, canvas.width / 2, 5 + topOffset + headerHeight / 2 + 10);
 
       // Subheading under the header bar
       ctx.fillStyle = '#2c3e50';
       ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
-      ctx.fillText('CONSTITUTIONAL PRESS', canvas.width / 2, 5 + headerHeight + 28);
+      ctx.fillText('CONSTITUTIONAL PRESS', canvas.width / 2, 5 + topOffset + headerHeight + 28);
 
       // Dimensions for photo and right-hand column
       const photoX = 25;
-      // Position the photo area below the header and subheading.  This ensures
-      // adequate spacing between the red bar and the credential content.  The
-      // y‑coordinate accounts for the 5px padding, 60px header, subheading and
-      // an extra margin of 20px.
-      const photoY = 140;
-      const photoW = 150;
-      const photoH = 180;
+      // Position the photo area below the header and subheading.
+      const photoY = 140 + topOffset;
+      const photoW = 180;
+      const photoH = 220;
       const rightX = photoX + photoW + 20;
       const rightW = canvas.width - rightX - 25;
 
@@ -333,25 +339,32 @@
       // offset by a consistent spacing to keep the content within the
       // constrained height.
       let yPos = photoY + 25;
-      // Brand lines: FULL / COURT / PRESS.  Use a slightly smaller font
-      // (24px) and 28px line spacing to conserve vertical space.
+      // Draw the passholder's name, split into stacked lines.
       ctx.fillStyle = '#2c3e50';
       ctx.textAlign = 'center';
-      ['FULL', 'COURT', 'PRESS'].forEach(word => {
+      const nameParts = displayName.toUpperCase().split(/\s+/);
+      nameParts.forEach(part => {
         ctx.font = 'bold 24px "Helvetica", Arial, sans-serif';
-        ctx.fillText(word, rightCenterX, yPos);
+        ctx.fillText(part, rightCenterX, yPos);
         yPos += 28;
       });
       // Small gap before role lines
       yPos += 5;
-      // Role lines: INDEPENDENT / JOURNALIST.  Use a 12px font and
-      // 20px spacing between lines.
-      ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
-      ctx.fillText('INDEPENDENT', rightCenterX, yPos);
-      yPos += 20;
-      ctx.fillText('JOURNALIST', rightCenterX, yPos);
-      yPos += 20;
-      // Name already drawn in stacked form above
+      // Draw organization or default to INDEPENDENT JOURNALIST
+      if (displayOrg) {
+        ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
+        const orgParts = displayOrg.toUpperCase().split(/\s+/);
+        orgParts.forEach(part => {
+          ctx.fillText(part, rightCenterX, yPos);
+          yPos += 20;
+        });
+      } else {
+        ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
+        ctx.fillText('INDEPENDENT', rightCenterX, yPos);
+        yPos += 20;
+        ctx.fillText('JOURNALIST', rightCenterX, yPos);
+        yPos += 20;
+      }
       // Personal title – smaller size (initial 12px) and scaled if long.
       const titleFontSize = fitText(displayTitle, 12, rightW - 10);
       ctx.font = `bold ${titleFontSize}px "Helvetica", Arial, sans-serif`;
@@ -399,7 +412,8 @@
       ctx.font = 'bold 10px "Helvetica", Arial, sans-serif';
       const noteLines = [
         'Do not hinder, exclude, or block the view of this journalist',
-        'in the exercise of court‑recognized First Amendment rights.'
+        'in the exercise of court‑recognized First Amendment rights.',
+        'Reporters Committee Legal Hotline: 1-800-336-4243'
       ];
       noteLines.forEach((t, i) => {
         ctx.fillText(t, canvas.width / 2, baseY + i * 14);
@@ -438,15 +452,26 @@
       }
     });
     
-    // Download functionality
-    document.getElementById('download').addEventListener('click', () => {
+    // Download or share functionality
+    document.getElementById('download').addEventListener('click', async () => {
+      const dataUrl = canvas.toDataURL('image/png');
+      const blob = await (await fetch(dataUrl)).blob();
+      const file = new File([blob], 'press-pass.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file], title: 'Press Pass' });
+          return;
+        } catch (err) {
+          console.error('Share failed, falling back to download.', err);
+        }
+      }
       const link = document.createElement('a');
       link.download = 'press-pass.png';
-      link.href = canvas.toDataURL('image/png');
+      link.href = dataUrl;
       link.click();
     });
-    
-    // Open image functionality (for mobile)
+
+    // Open image functionality (for saving to gallery via long-press)
     document.getElementById('openImage').addEventListener('click', () => {
       const dataUrl = canvas.toDataURL('image/png');
       window.open(dataUrl, '_blank');
@@ -484,20 +509,19 @@
     });
     
     // Initialize with a sample pass
-    drawPass('YOUR NAME HERE', 'Investigative Journalist');
+    drawPass('YOUR NAME HERE', 'Investigative Journalist', '');
 
-    // Add real-time updates for name and title fields
-    document.getElementById('name').addEventListener('input', function() {
-      const nameValue = this.value.trim();
-      const titleValue = document.getElementById('title').value.trim();
-      drawPass(nameValue || 'YOUR NAME HERE', titleValue);
-    });
-
-    document.getElementById('title').addEventListener('input', function() {
+    // Add real-time updates for form fields
+    function updatePreview() {
       const nameValue = document.getElementById('name').value.trim();
-      const titleValue = this.value.trim();
-      drawPass(nameValue || 'YOUR NAME HERE', titleValue);
-    });
+      const titleValue = document.getElementById('title').value.trim();
+      const orgValue = document.getElementById('organization').value.trim();
+      drawPass(nameValue || 'YOUR NAME HERE', titleValue, orgValue);
+    }
+
+    document.getElementById('name').addEventListener('input', updatePreview);
+    document.getElementById('title').addEventListener('input', updatePreview);
+    document.getElementById('organization').addEventListener('input', updatePreview);
   </script>
 
   <!-- Module script to handle press pass generation and tracking -->
@@ -507,6 +531,7 @@
     document.getElementById('generate').addEventListener('click', async () => {
       const nameInput = document.getElementById('name').value;
       const titleInput = document.getElementById('title').value;
+      const orgInput = document.getElementById('organization').value;
       const emailInput = document.getElementById('email').value;
       const passNumber = genPassId();
       // Determine if a photo file has been selected.  If so, read it as a data URL
@@ -516,14 +541,14 @@
         const reader = new FileReader();
         reader.onload = function(e) {
           // Draw the pass including the uploaded photo
-          drawPass(nameInput, titleInput, e.target.result);
+          drawPass(nameInput, titleInput, orgInput, e.target.result);
           // Record the pass details in the backend
           trackPass({
             name: nameInput,
             title: titleInput,
+            organization: orgInput,
             email: emailInput,
-            pass_number: passNumber,
-            organization: 'Full Court Press' // Adding organization field
+            pass_number: passNumber
           }).catch(err => {
             console.error('Error tracking press pass:', err);
           });
@@ -531,13 +556,13 @@
         reader.onerror = function() {
           alert('Error reading file. Please try another photo.');
           // Still draw the pass without a photo if reading fails
-          drawPass(nameInput, titleInput);
+          drawPass(nameInput, titleInput, orgInput);
           trackPass({
             name: nameInput,
             title: titleInput,
+            organization: orgInput,
             email: emailInput,
-            pass_number: passNumber,
-            organization: 'Full Court Press' // Adding organization field
+            pass_number: passNumber
           }).catch(err => {
             console.error('Error tracking press pass:', err);
           });
@@ -545,13 +570,13 @@
         reader.readAsDataURL(photoInput.files[0]);
       } else {
         // No photo selected: draw the pass with placeholder and record details
-        drawPass(nameInput, titleInput);
+        drawPass(nameInput, titleInput, orgInput);
         trackPass({
           name: nameInput,
           title: titleInput,
+          organization: orgInput,
           email: emailInput,
-          pass_number: passNumber,
-          organization: 'Full Court Press' // Adding organization field
+          pass_number: passNumber
         }).catch(err => {
           console.error('Error tracking press pass:', err);
         });

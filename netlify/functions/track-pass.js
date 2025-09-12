@@ -26,6 +26,7 @@ exports.handler = async (event) => {
     const payload = {
       name: data.name,
       title: data.title || null,
+      organization: data.organization || null,
       email: data.email,
       pass_number: data.pass_number,
       created_at: new Date().toISOString()
