@@ -89,6 +89,12 @@
             <input type="text" id="title" name="title" value="Investigative Journalist" required>
           </div>
 
+          <!-- Organization input (optional) -->
+          <div class="form-group">
+            <label for="organization">Organization (Optional):</label>
+            <input type="text" id="organization" name="organization">
+          </div>
+
           <!-- Email address input for tracking passes -->
           <div class="form-group">
             <label for="email">Email Address:</label>
@@ -248,7 +254,7 @@
     // after a traditional laminated credential with a large photo on the left,
     // a bold vertical brand on the right and important metadata below.  Text
     // measurements are adjusted to avoid overruns beyond the canvas margins.
-    function drawPass(name, title, photoSrc = null) {
+    function drawPass(name, title, organization = null, photoSrc = null) {
       // Normalize inputs and provide defaults
       const displayName = name && name.trim() ? name.trim() : 'YOUR NAME HERE';
       const displayTitle = title && title.trim() ? title.trim() : 'INDEPENDENT JOURNALIST';
@@ -344,13 +350,20 @@
       });
       // Small gap before role lines
       yPos += 5;
-      // Role lines: INDEPENDENT / JOURNALIST.  Use a 12px font and
-      // 20px spacing between lines.
+      // Role lines: Display organization if provided, otherwise INDEPENDENT JOURNALIST
       ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
-      ctx.fillText('INDEPENDENT', rightCenterX, yPos);
-      yPos += 20;
-      ctx.fillText('JOURNALIST', rightCenterX, yPos);
-      yPos += 20;
+      if (organization && organization.trim()) {
+        const orgLines = organization.trim().toUpperCase().split(/\\s+/);
+        orgLines.forEach((line, index) => {
+          ctx.fillText(line, rightCenterX, yPos + index * 20);
+        });
+        yPos += orgLines.length * 20;
+      } else {
+        ctx.fillText('INDEPENDENT', rightCenterX, yPos);
+        yPos += 20;
+        ctx.fillText('JOURNALIST', rightCenterX, yPos);
+        yPos += 20;
+      }
       // Personal title – smaller size (initial 12px) and scaled if long.
       const titleFontSize = fitText(displayTitle, 12, rightW - 10);
       ctx.font = `bold ${titleFontSize}px "Helvetica", Arial, sans-serif`;
@@ -461,11 +474,19 @@
       checkoutButton.disabled = true;
       
       const name = (document.getElementById('name').value || '').trim();
+      const title = (document.getElementById('title').value || '').trim();
+      const organization = (document.getElementById('organization').value || '').trim();
       const id = 'pass-' + (Date.now().toString(36).toUpperCase());
       try {
         const res = await fetch('/.netlify/functions/create-checkout-session', {
           method: 'POST',
-          body: JSON.stringify({ quantity: 1, passId: id, name })
+          body: JSON.stringify({ 
+            quantity: 1, 
+            passId: id, 
+            name,
+            title,
+            organization: organization || 'INDEPENDENT JOURNALIST'
+          })
         });
         const data = await res.json();
         if (data.url) {
@@ -483,19 +504,29 @@
     });
     
     // Initialize with a sample pass
-    drawPass('YOUR NAME HERE', 'Investigative Journalist');
+    drawPass('YOUR NAME HERE', 'Investigative Journalist', null);
 
-    // Add real-time updates for name and title fields
+    // Add real-time updates for name, title, and organization fields
     document.getElementById('name').addEventListener('input', function() {
       const nameValue = this.value.trim();
       const titleValue = document.getElementById('title').value.trim();
-      drawPass(nameValue || 'YOUR NAME HERE', titleValue);
+      const organizationValue = document.getElementById('organization').value.trim();
+      drawPass(nameValue || 'YOUR NAME HERE', titleValue, organizationValue);
     });
 
     document.getElementById('title').addEventListener('input', function() {
       const nameValue = document.getElementById('name').value.trim();
       const titleValue = this.value.trim();
-      drawPass(nameValue || 'YOUR NAME HERE', titleValue);
+      const organizationValue = document.getElementById('organization').value.trim();
+      drawPass(nameValue || 'YOUR NAME HERE', titleValue, organizationValue);
+    });
+
+    // Add real-time updates for organization field
+    document.getElementById('organization').addEventListener('input', function() {
+      const nameValue = document.getElementById('name').value.trim();
+      const titleValue = document.getElementById('title').value.trim();
+      const organizationValue = this.value.trim();
+      drawPass(nameValue || 'YOUR NAME HERE', titleValue, organizationValue);
     });
   </script>
 
@@ -515,14 +546,16 @@
         const reader = new FileReader();
         reader.onload = function(e) {
           // Draw the pass including the uploaded photo
-          drawPass(nameInput, titleInput, e.target.result);
+          const organizationInput = document.getElementById('organization').value;
+          drawPass(nameInput, titleInput, organizationInput, e.target.result);
           // Record the pass details in the backend
+          const organizationInput = document.getElementById('organization').value;
           trackPass({
             name: nameInput,
             title: titleInput,
             email: emailInput,
             pass_number: passNumber,
-            organization: 'Full Court Press' // Adding organization field
+            organization: organizationInput || 'INDEPENDENT JOURNALIST'
           }).catch(err => {
             console.error('Error tracking press pass:', err);
           });
@@ -530,13 +563,15 @@
         reader.onerror = function() {
           alert('Error reading file. Please try another photo.');
           // Still draw the pass without a photo if reading fails
-          drawPass(nameInput, titleInput);
+          const organizationInput = document.getElementById('organization').value;
+          drawPass(nameInput, titleInput, organizationInput);
+          const organizationInput = document.getElementById('organization').value;
           trackPass({
             name: nameInput,
             title: titleInput,
             email: emailInput,
             pass_number: passNumber,
-            organization: 'Full Court Press' // Adding organization field
+            organization: organizationInput || 'INDEPENDENT JOURNALIST'
           }).catch(err => {
             console.error('Error tracking press pass:', err);
           });
@@ -544,13 +579,15 @@
         reader.readAsDataURL(photoInput.files[0]);
       } else {
         // No photo selected: draw the pass with placeholder and record details
-        drawPass(nameInput, titleInput);
+        const organizationInput = document.getElementById('organization').value;
+        drawPass(nameInput, titleInput, organizationInput);
+        const organizationInput = document.getElementById('organization').value;
         trackPass({
           name: nameInput,
           title: titleInput,
           email: emailInput,
           pass_number: passNumber,
-          organization: 'Full Court Press' // Adding organization field
+          organization: organizationInput || 'INDEPENDENT JOURNALIST'
         }).catch(err => {
           console.error('Error tracking press pass:', err);
         });
