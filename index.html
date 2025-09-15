@@ -152,6 +152,12 @@
             <input type="text" id="organization" name="organization">
           </div>
 
+          <!-- Organization input (optional) -->
+          <div class="form-group">
+            <label for="organization">Organization (Optional):</label>
+            <input type="text" id="organization" name="organization">
+          </div>
+
           <!-- Email address input for tracking passes -->
           <div class="form-group">
             <label for="email">Email Address:</label>
@@ -560,10 +566,10 @@
       checkoutButton.disabled = true;
       
       const name = (document.getElementById('name').value || '').trim();
+
  add-organization-field
       const title = (document.getElementById('title').value || '').trim();
       const organization = (document.getElementById('organization').value || '').trim();
-
       const email = (document.getElementById('email').value || '').trim();
       const title = (document.getElementById('title').value || '').trim();
       main
@@ -572,6 +578,7 @@
       try {
         const res = await fetch('/.netlify/functions/create-checkout-session', {
           method: 'POST',
+
  add-organization-field
           headers: {
             'Content-Type': 'application/json'
@@ -581,6 +588,7 @@
             quantity: 1, 
             passId: id, 
             name,
+
  add-organization-field
             title,
             organization: organization || 'INDEPENDENT JOURNALIST'
@@ -606,7 +614,7 @@
               title,
               email,
               pass_number: id,
-              organization: 'Full Court Press',
+              organization: 'ORGANIZATION',
               paid: true
             });
           } catch (trackError) {
