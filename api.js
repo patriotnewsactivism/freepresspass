@@ -4,7 +4,7 @@
 /**
  * Send a new press pass record to the backend for persistent storage.
  *
- * @param {Object} passData - Object containing name, title, email and pass_number.
+ * @param {Object} passData - Object containing name, title, email, organization and pass_number.
  * @returns {Promise<Object>} The inserted pass record as returned by the server.
  */
 export async function trackPass(passData) {

@@ -28,6 +28,7 @@ exports.handler = async (event) => {
       title: data.title || null,
       email: data.email,
       pass_number: data.pass_number,
+      organization: data.organization || null,
       created_at: new Date().toISOString()
     };
     const { data: inserted, error } = await supabase
