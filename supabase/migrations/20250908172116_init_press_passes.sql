@@ -16,6 +16,8 @@ create table if not exists public.press_passes (
   pass_number    uuid not null default gen_random_uuid(),
   full_name      text not null,
   email          text not null,
+  title          text,
+  organization   text,
   issued_at      timestamptz not null default now(),
   -- Additional fields for auditability and revocation
   revoked        boolean not null default false,
