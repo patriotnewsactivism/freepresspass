@@ -3,6 +3,18 @@
   publish = "."
   functions = "netlify/functions"
 
+[dev]
+  command = "npm run dev"
+  port = 8888
+  targetPort = 3000
+  publish = "."
+  autoLaunch = true
+  framework = "#custom"
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["@supabase/supabase-js", "stripe"]
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
@@ -12,13 +24,28 @@
   from = "/*"
   to = "/index.html"
   status = 200
+  force = false
 
 [[headers]]
   for = "/*"
   [headers.values]
     Cache-Control = "public, max-age=3600"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://sites.super.myninja.ai; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.unsplash.com https://*.pexels.com https://*.pixabay.com; connect-src 'self' https://*.supabase.co https://api.stripe.com;"
 
 [[headers]]
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=86400"
+
+# Environment variable placeholders - these will be replaced by actual values in Netlify dashboard
+[template.environment]
+  SUPABASE_URL = "Your Supabase project URL"
+  SUPABASE_ANON_KEY = "Your Supabase anon key"
+  SUPABASE_SERVICE_ROLE_KEY = "Your Supabase service role key"
+  STRIPE_PUBLISHABLE_KEY = "Your Stripe publishable key"
+  STRIPE_SECRET_KEY = "Your Stripe secret key"
+  STRIPE_WEBHOOK_SECRET = "Your Stripe webhook secret"
