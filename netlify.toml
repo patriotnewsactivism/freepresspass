@@ -1,7 +1,18 @@
 [build]
-  command = "npm run build"
+  command = "echo 'Static site ready for deployment'"
   publish = "."
   functions = "netlify/functions"
+
+[dev]
+  command = "netlify dev"
+  port = 8888
+  publish = "."
+  autoLaunch = true
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["@supabase/supabase-js", "stripe"]
+
 
 [[redirects]]
   from = "/api/*"
