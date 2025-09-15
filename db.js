@@ -1,29 +1,76 @@
-// Database implementation using localStorage as a simple solution
-// In a production environment, this would be replaced with a proper database
+// Database implementation using Supabase
+// This file provides a client-side interface to the Supabase database
+
+import { createClient } from '@supabase/supabase-js';
 
 class Database {
   constructor() {
+    // Initialize Supabase client with public anon key (safe for client-side)
+    // These values should be replaced with environment variables in production
+    this.supabaseUrl = 'https://your-supabase-url.supabase.co';
+    this.supabaseAnonKey = 'your-supabase-anon-key';
+    
+    // Initialize the Supabase client
+    this.supabase = createClient(this.supabaseUrl, this.supabaseAnonKey);
+    
+    // Fallback to localStorage if offline or for development
     this.storageKey = 'pressPasses';
-    this.ensureStorage();
+    this.ensureLocalStorage();
   }
 
-  // Ensure localStorage has the required structure
-  ensureStorage() {
-    if (!localStorage.getItem(this.storageKey)) {
+  // Ensure localStorage has the required structure for offline/development use
+  ensureLocalStorage() {
+    if (typeof localStorage !== 'undefined' && !localStorage.getItem(this.storageKey)) {
       localStorage.setItem(this.storageKey, JSON.stringify([]));
     }
   }
 
   // Add a new press pass to the database
-  addPass(passData) {
-    const passes = JSON.parse(localStorage.getItem(this.storageKey));
-    passes.push({
-      ...passData,
-      id: this.generateId(),
-      createdAt: new Date().toISOString()
-    });
-    localStorage.setItem(this.storageKey, JSON.stringify(passes));
-    return passes[passes.length - 1];
+  async addPass(passData) {
+    try {
+      // First try to add to Supabase
+      const { data, error } = await this.supabase
+        .from('press_passes')
+        .insert({
+          full_name: passData.name,
+          email: passData.email,
+          title: passData.title || null,
+          organization: passData.organization || null,
+          // Use the provided pass number or generate a new one
+          pass_number: passData.pass_number || this.generateId()
+        })
+        .select();
+
+      if (error) {
+        console.error('Supabase error:', error);
+        // Fall back to localStorage if Supabase fails
+        return this.addPassToLocalStorage(passData);
+      }
+
+      return data[0];
+    } catch (err) {
+      console.error('Database error:', err);
+      // Fall back to localStorage if there's any error
+      return this.addPassToLocalStorage(passData);
+    }
+  }
+
+  // Fallback method to add pass to localStorage
+  addPassToLocalStorage(passData) {
+    try {
+      const passes = JSON.parse(localStorage.getItem(this.storageKey)) || [];
+      const newPass = {
+        ...passData,
+        id: this.generateId(),
+        created_at: new Date().toISOString()
+      };
+      passes.push(newPass);
+      localStorage.setItem(this.storageKey, JSON.stringify(passes));
+      return newPass;
+    } catch (err) {
+      console.error('LocalStorage error:', err);
+      return null;
+    }
   }
 
   // Generate a unique ID for each pass
@@ -32,57 +79,163 @@ class Database {
   }
 
   // Get all passes from the database
-  getAllPasses() {
-    return JSON.parse(localStorage.getItem(this.storageKey)) || [];
+  async getAllPasses() {
+    try {
+      // Try to get from Supabase first
+      const { data, error } = await this.supabase
+        .from('press_passes')
+        .select('*')
+        .order('issued_at', { ascending: false });
+
+      if (error) {
+        console.error('Supabase error:', error);
+        // Fall back to localStorage
+        return JSON.parse(localStorage.getItem(this.storageKey)) || [];
+      }
+
+      return data;
+    } catch (err) {
+      console.error('Database error:', err);
+      // Fall back to localStorage
+      return JSON.parse(localStorage.getItem(this.storageKey)) || [];
+    }
   }
 
   // Get a specific pass by ID
-  getPassById(id) {
-    const passes = this.getAllPasses();
-    return passes.find(pass => pass.id === id);
+  async getPassById(id) {
+    try {
+      // Try to get from Supabase first
+      const { data, error } = await this.supabase
+        .from('press_passes')
+        .select('*')
+        .eq('pass_number', id)
+        .single();
+
+      if (error) {
+        console.error('Supabase error:', error);
+        // Fall back to localStorage
+        const passes = JSON.parse(localStorage.getItem(this.storageKey)) || [];
+        return passes.find(pass => pass.id === id || pass.pass_number === id);
+      }
+
+      return data;
+    } catch (err) {
+      console.error('Database error:', err);
+      // Fall back to localStorage
+      const passes = JSON.parse(localStorage.getItem(this.storageKey)) || [];
+      return passes.find(pass => pass.id === id || pass.pass_number === id);
+    }
   }
 
   // Delete a pass by ID
-  deletePassById(id) {
-    const passes = this.getAllPasses();
-    const filteredPasses = passes.filter(pass => pass.id !== id);
-    localStorage.setItem(this.storageKey, JSON.stringify(filteredPasses));
-    return filteredPasses;
+  async deletePassById(id) {
+    try {
+      // Try to delete from Supabase first
+      const { error } = await this.supabase
+        .from('press_passes')
+        .delete()
+        .eq('pass_number', id);
+
+      if (error) {
+        console.error('Supabase error:', error);
+        // Fall back to localStorage
+        const passes = JSON.parse(localStorage.getItem(this.storageKey)) || [];
+        const filteredPasses = passes.filter(pass => pass.id !== id && pass.pass_number !== id);
+        localStorage.setItem(this.storageKey, JSON.stringify(filteredPasses));
+        return filteredPasses;
+      }
+
+      // Also remove from localStorage if it exists there
+      const passes = JSON.parse(localStorage.getItem(this.storageKey)) || [];
+      const filteredPasses = passes.filter(pass => pass.id !== id && pass.pass_number !== id);
+      localStorage.setItem(this.storageKey, JSON.stringify(filteredPasses));
+      
+      return await this.getAllPasses();
+    } catch (err) {
+      console.error('Database error:', err);
+      // Fall back to localStorage
+      const passes = JSON.parse(localStorage.getItem(this.storageKey)) || [];
+      const filteredPasses = passes.filter(pass => pass.id !== id && pass.pass_number !== id);
+      localStorage.setItem(this.storageKey, JSON.stringify(filteredPasses));
+      return filteredPasses;
+    }
   }
 
   // Update a pass by ID
-  updatePassById(id, updateData) {
-    const passes = this.getAllPasses();
-    const passIndex = passes.findIndex(pass => pass.id === id);
-    
-    if (passIndex !== -1) {
-      passes[passIndex] = {
-        ...passes[passIndex],
-        ...updateData
-      };
-      localStorage.setItem(this.storageKey, JSON.stringify(passes));
-      return passes[passIndex];
+  async updatePassById(id, updateData) {
+    try {
+      // Try to update in Supabase first
+      const { data, error } = await this.supabase
+        .from('press_passes')
+        .update({
+          full_name: updateData.name,
+          email: updateData.email,
+          title: updateData.title,
+          organization: updateData.organization
+        })
+        .eq('pass_number', id)
+        .select();
+
+      if (error) {
+        console.error('Supabase error:', error);
+        // Fall back to localStorage
+        const passes = JSON.parse(localStorage.getItem(this.storageKey)) || [];
+        const passIndex = passes.findIndex(pass => pass.id === id || pass.pass_number === id);
+        
+        if (passIndex !== -1) {
+          passes[passIndex] = {
+            ...passes[passIndex],
+            ...updateData
+          };
+          localStorage.setItem(this.storageKey, JSON.stringify(passes));
+          return passes[passIndex];
+        }
+        
+        return null;
+      }
+
+      return data[0];
+    } catch (err) {
+      console.error('Database error:', err);
+      // Fall back to localStorage
+      const passes = JSON.parse(localStorage.getItem(this.storageKey)) || [];
+      const passIndex = passes.findIndex(pass => pass.id === id || pass.pass_number === id);
+      
+      if (passIndex !== -1) {
+        passes[passIndex] = {
+          ...passes[passIndex],
+          ...updateData
+        };
+        localStorage.setItem(this.storageKey, JSON.stringify(passes));
+        return passes[passIndex];
+      }
+      
+      return null;
     }
-    
-    return null;
   }
 
   // Get passes count
-  getPassesCount() {
-    return this.getAllPasses().length;
+  async getPassesCount() {
+    const passes = await this.getAllPasses();
+    return passes.length;
   }
 
   // Get passes for current month
-  getMonthlyPasses() {
-    const passes = this.getAllPasses();
+  async getMonthlyPasses() {
+    const passes = await this.getAllPasses();
     const currentMonth = new Date().toISOString().slice(0, 7);
-    return passes.filter(pass => pass.createdAt.startsWith(currentMonth));
+    return passes.filter(pass => {
+      const createdAt = pass.created_at || pass.issued_at;
+      return createdAt && createdAt.startsWith(currentMonth);
+    });
   }
 
   // Get unique email domains
-  getUniqueEmailDomains() {
-    const passes = this.getAllPasses();
-    const domains = passes.map(pass => pass.email.split('@')[1]);
+  async getUniqueEmailDomains() {
+    const passes = await this.getAllPasses();
+    const domains = passes
+      .filter(pass => pass.email)
+      .map(pass => pass.email.split('@')[1]);
     return [...new Set(domains)];
   }
 }
