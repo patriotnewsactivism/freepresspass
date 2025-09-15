@@ -9,7 +9,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { quantity, passId, name, title, organization } = JSON.parse(event.body);
+    const { quantity, passId, name, title } = JSON.parse(event.body);
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -24,7 +24,6 @@ exports.handler = async (event) => {
         passId: passId,
         name: name,
         title: title,
-        organization: organization,
       },
     });
 

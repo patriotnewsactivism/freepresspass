@@ -85,14 +85,8 @@
           </div>
           
           <div class="form-group">
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" value="Investigative Journalist" required>
-          </div>
-
-          <!-- Organization input (optional) -->
-          <div class="form-group">
-            <label for="organization">Organization (Optional):</label>
-            <input type="text" id="organization" name="organization">
+            <label for="title">Organization Name (if applicable):</label>
+            <input type="text" id="title" name="title" value="" required>
           </div>
 
           <!-- Email address input for tracking passes -->
@@ -254,7 +248,7 @@
     // after a traditional laminated credential with a large photo on the left,
     // a bold vertical brand on the right and important metadata below.  Text
     // measurements are adjusted to avoid overruns beyond the canvas margins.
-    function drawPass(name, title, organization = null, photoSrc = null) {
+    function drawPass(name, title, photoSrc = null) {
       // Normalize inputs and provide defaults
       const displayName = name && name.trim() ? name.trim() : 'YOUR NAME HERE';
       const displayTitle = title && title.trim() ? title.trim() : 'INDEPENDENT JOURNALIST';
@@ -323,6 +317,11 @@
         const img = new Image();
         img.onload = function() {
           ctx.drawImage(img, photoX, photoY, photoW, photoH);
+        };
+        img.onerror = function() {
+          // If image fails to load, display placeholder
+          ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
+          ctx.fillText('PHOTO', photoX + photoW / 2, photoY + photoH / 2);
         };
         img.src = photoSrc;
       } else {
@@ -430,9 +429,9 @@
         
         reader.onload = function(event) {
           previewImage.src = event.target.result;
-          preview.style.display = 'block';
-          
-          // Add error handling for image loading
+          previewImage.onload = function() {
+            preview.style.display = 'block';
+          };
           previewImage.onerror = function() {
             alert('Error loading image. Please try another photo.');
             preview.style.display = 'none';
@@ -475,7 +474,6 @@
       
       const name = (document.getElementById('name').value || '').trim();
       const title = (document.getElementById('title').value || '').trim();
-      const organization = (document.getElementById('organization').value || '').trim();
       const id = 'pass-' + (Date.now().toString(36).toUpperCase());
       try {
         const res = await fetch('/.netlify/functions/create-checkout-session', {
@@ -484,8 +482,7 @@
             quantity: 1, 
             passId: id, 
             name,
-            title,
-            organization: organization || 'INDEPENDENT JOURNALIST'
+            title
           })
         });
         const data = await res.json();
@@ -504,29 +501,26 @@
     });
     
     // Initialize with a sample pass
-    drawPass('YOUR NAME HERE', 'Investigative Journalist', null);
+    drawPass('YOUR NAME HERE', 'Investigative Journalist');
 
     // Add real-time updates for name, title, and organization fields
     document.getElementById('name').addEventListener('input', function() {
       const nameValue = this.value.trim();
       const titleValue = document.getElementById('title').value.trim();
-      const organizationValue = document.getElementById('organization').value.trim();
-      drawPass(nameValue || 'YOUR NAME HERE', titleValue, organizationValue);
+      drawPass(nameValue || 'YOUR NAME HERE', titleValue);
     });
 
     document.getElementById('title').addEventListener('input', function() {
       const nameValue = document.getElementById('name').value.trim();
       const titleValue = this.value.trim();
-      const organizationValue = document.getElementById('organization').value.trim();
-      drawPass(nameValue || 'YOUR NAME HERE', titleValue, organizationValue);
+      drawPass(nameValue || 'YOUR NAME HERE', titleValue);
     });
 
-    // Add real-time updates for organization field
-    document.getElementById('organization').addEventListener('input', function() {
+    // Add real-time updates for title field
+    document.getElementById('title').addEventListener('input', function() {
       const nameValue = document.getElementById('name').value.trim();
-      const titleValue = document.getElementById('title').value.trim();
-      const organizationValue = this.value.trim();
-      drawPass(nameValue || 'YOUR NAME HERE', titleValue, organizationValue);
+      const titleValue = this.value.trim();
+      drawPass(nameValue || 'YOUR NAME HERE', titleValue);
     });
   </script>
 
@@ -547,9 +541,8 @@
         reader.onload = function(e) {
           // Draw the pass including the uploaded photo
           const organizationInput = document.getElementById('organization').value;
-          drawPass(nameInput, titleInput, organizationInput, e.target.result);
+          drawPass(nameInput, titleInput, e.target.result);
           // Record the pass details in the backend
-          const organizationInput = document.getElementById('organization').value;
           trackPass({
             name: nameInput,
             title: titleInput,
@@ -563,9 +556,7 @@
         reader.onerror = function() {
           alert('Error reading file. Please try another photo.');
           // Still draw the pass without a photo if reading fails
-          const organizationInput = document.getElementById('organization').value;
-          drawPass(nameInput, titleInput, organizationInput);
-          const organizationInput = document.getElementById('organization').value;
+          drawPass(nameInput, titleInput);
           trackPass({
             name: nameInput,
             title: titleInput,
@@ -579,9 +570,7 @@
         reader.readAsDataURL(photoInput.files[0]);
       } else {
         // No photo selected: draw the pass with placeholder and record details
-        const organizationInput = document.getElementById('organization').value;
-        drawPass(nameInput, titleInput, organizationInput);
-        const organizationInput = document.getElementById('organization').value;
+        drawPass(nameInput, titleInput);
         trackPass({
           name: nameInput,
           title: titleInput,
