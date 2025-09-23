@@ -121,11 +121,6 @@
   
   <main role="main">
     <div class="container">
-      <div class="form-section" role="region" aria-labelledby="form-heading">
-        <h2 id="form-heading">Generate Your Press Pass</h2>
-  
-  <main>
-    <div class="container">
       <div class="form-section">
         <h2>Generate Your Press Pass</h2>
         <form id="passForm" netlify>
@@ -140,22 +135,10 @@
           
           <div class="form-group">
             <label for="title">Organization Name (if applicable):</label>
-            <input type="text" id="title" name="title" value="" required>
-            <input type="text" id="title" name="title" value="Investigative Journalist"                   
-          oninput="this.style.borderColor = this.value ? '' : 'red'">
+            <input type="text" id="title" name="title" 
+                   placeholder="Your organization name (if applicable)"
+                   oninput="this.style.borderColor = this.value ? '' : 'red'">
             <div class="error-message" id="title-error"></div>
-          </div>
-
-          <!-- Organization input (optional) -->
-          <div class="form-group">
-            <label for="organization">Organization (Optional):</label>
-            <input type="text" id="organization" name="organization">
-          </div>
-
-          <!-- Organization input (optional) -->
-          <div class="form-group">
-            <label for="organization">Organization (Optional):</label>
-            <input type="text" id="organization" name="organization">
           </div>
 
           <!-- Email address input for tracking passes -->
@@ -440,26 +423,23 @@
         ctx.fillText(part, rightCenterX, yPos);
         yPos += 28;
       });
+      
       // Small gap before role lines
       yPos += 5;
-      // Role lines: Display organization if provided, otherwise INDEPENDENT JOURNALIST
+      // Role lines: Display title if provided, otherwise INDEPENDENT JOURNALIST
       ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
-      if (organization && organization.trim()) {
-        const orgLines = organization.trim().toUpperCase().split(/\\s+/);
-        orgLines.forEach((line, index) => {
+      if (title && title.trim()) {
+        const titleLines = title.trim().toUpperCase().split(/\s+/);
+        titleLines.forEach((line, index) => {
           ctx.fillText(line, rightCenterX, yPos + index * 20);
         });
-        yPos += orgLines.length * 20;
+        yPos += titleLines.length * 20;
       } else {
         ctx.fillText('INDEPENDENT', rightCenterX, yPos);
         yPos += 20;
         ctx.fillText('JOURNALIST', rightCenterX, yPos);
         yPos += 20;
       }
-      // Personal title – smaller size (initial 12px) and scaled if long.
-      const titleFontSize = fitText(displayTitle, 12, rightW - 10);
-      ctx.font = `bold ${titleFontSize}px "Helvetica", Arial, sans-serif`;
-      ctx.fillText(displayTitle, rightCenterX, yPos);
 
       // Baseline for metadata section
       let baseY = photoY + photoH + 30;
@@ -566,42 +546,27 @@
       const checkoutButton = document.getElementById('checkout');
       const originalText = checkoutButton.innerHTML;
       
-      // Show loading indicator with spinner
+      // Show loading indicator
       checkoutButton.innerHTML = '<span class="spinner"></span> Processing...';
       checkoutButton.disabled = true;
       
       const name = (document.getElementById('name').value || '').trim();
-
- add-organization-field
-      const organization = (document.getElementById('organization').value || '').trim();
-      const email = (document.getElementById('email').value || '').trim();
       const title = (document.getElementById('title').value || '').trim();
-      main
+      const email = (document.getElementById('email').value || '').trim();
       const id = 'pass-' + (Date.now().toString(36).toUpperCase());
       
       try {
         const res = await fetch('/.netlify/functions/create-checkout-session', {
           method: 'POST',
-
- add-organization-field
           headers: {
             'Content-Type': 'application/json'
           },
- main
           body: JSON.stringify({ 
             quantity: 1, 
             passId: id, 
             name,
-         
-                                
- add-organization-field
             title,
-            organization: organization || 'INDEPENDENT JOURNALIST'
-
-            email,
-            title,
-            organization: 'Full Court Press'
- main
+            email
           })
         });
         
@@ -612,22 +577,6 @@
         
         const data = await res.json();
         if (data.url) {
-          // Track the pass in our database before redirecting
-          try {
-            await trackPass({
-              name,
-              title,
-              email,
-              pass_number: id,
-              organization: 'ORGANIZATION',
-              paid: true
-            });
-          } catch (trackError) {
-            console.error('Error tracking paid pass:', trackError);
-            // Continue with checkout even if tracking fails
-          }
-          
-          // Redirect to Stripe checkout
           window.location.href = data.url;
         } else {
           showNotification(data.error || 'Unable to start checkout.', 'error');
@@ -646,16 +595,13 @@
     function validateForm() {
       const nameInput = document.getElementById('name');
       const emailInput = document.getElementById('email');
-      const titleInput = document.getElementById('title');
       
       // Reset previous error states
       nameInput.style.borderColor = '';
       emailInput.style.borderColor = '';
-      titleInput.style.borderColor = '';
       
       document.getElementById('name-error').textContent = '';
       document.getElementById('email-error').textContent = '';
-      document.getElementById('title-error').textContent = '';
       
       let isValid = true;
       
@@ -678,20 +624,13 @@
         isValid = false;
       }
       
-      // Validate title
-      if (!titleInput.value.trim()) {
-        titleInput.style.borderColor = 'red';
-        document.getElementById('title-error').textContent = 'Please enter your title';
-        isValid = false;
-      }
-      
       return isValid;
     }
     
     // Initialize with a sample pass
-    drawPass('YOUR NAME HERE', 'Investigative Journalist');
+    drawPass('YOUR NAME HERE', '');
 
-    // Add real-time updates for name, title, and organization fields
+    // Add real-time updates for name and title fields
     document.getElementById('name').addEventListener('input', function() {
       const nameValue = this.value.trim();
       const titleValue = document.getElementById('title').value.trim();
@@ -703,21 +642,8 @@
       const titleValue = this.value.trim();
       drawPass(nameValue || 'YOUR NAME HERE', titleValue);
     });
-
-    // Add real-time updates for title field
-    document.getElementById('title').addEventListener('input', function() {
-      const nameValue = document.getElementById('name').value.trim();
-      const titleValue = this.value.trim();
-      drawPass(nameValue || 'YOUR NAME HERE', titleValue);
-    });
-  </script>
-
-  <!-- Module script to handle press pass generation and tracking -->
-  <script type="module">
-    import { trackPass, isApiAvailable } from './api.js';
-    import db from './db.js';
     
-    // Create a notification system for user feedback
+    // Notification system
     function showNotification(message, type = 'success') {
       // Create notification element if it doesn't exist
       let notification = document.getElementById('notification');
@@ -759,46 +685,13 @@
       
       notification.style.display = 'block';
     }
+  </script>
+
+  <!-- Module script to handle press pass generation and tracking -->
+  <script type="module">
+    import { trackPass } from './api.js';
     
-    // Form validation function
-    function validateForm() {
-      const nameInput = document.getElementById('name');
-      const emailInput = document.getElementById('email');
-      const titleInput = document.getElementById('title');
-      
-      // Reset previous error states
-      nameInput.style.borderColor = '';
-      emailInput.style.borderColor = '';
-      titleInput.style.borderColor = '';
-      
-      let isValid = true;
-      
-      // Validate name
-      if (!nameInput.value.trim()) {
-        nameInput.style.borderColor = 'red';
-        showNotification('Please enter your full name', 'error');
-        isValid = false;
-      }
-      
-      // Validate email
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (!emailInput.value.trim() || !emailRegex.test(emailInput.value.trim())) {
-        emailInput.style.borderColor = 'red';
-        showNotification('Please enter a valid email address', 'error');
-        isValid = false;
-      }
-      
-      // Validate title
-      if (!titleInput.value.trim()) {
-        titleInput.style.borderColor = 'red';
-        showNotification('Please enter your title', 'error');
-        isValid = false;
-      }
-      
-      return isValid;
-    }
-    
-    // Attach an event listener to the Generate button that creates the pass image and records it in the database
+    // Attach an event listener to the Generate button that creates the pass image and records it in Supabase.
     document.getElementById('generate').addEventListener('click', async () => {
       // Validate form before proceeding
       if (!validateForm()) {
@@ -815,94 +708,36 @@
       const titleInput = document.getElementById('title').value;
       const emailInput = document.getElementById('email').value;
       const passNumber = genPassId();
- add-organization-field
-      // Determine if a photo file has been selected.  If so, read it as a data URL
-      // and then draw the pass with the photo once the file has been loaded.
-      const photoInput = document.getElementById('photo');
-      if (photoInput.files && photoInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          // Draw the pass including the uploaded photo
-          const organizationInput = document.getElementById('organization').value;
-          drawPass(nameInput, titleInput, e.target.result);
-          // Record the pass details in the backend
-          trackPass({
-            name: nameInput,
-            title: titleInput,
-            email: emailInput,
-            pass_number: passNumber,
-            organization: organizationInput || 'INDEPENDENT JOURNALIST'
-          }).catch(err => {
-            console.error('Error tracking press pass:', err);
-          });
-        };
-        reader.onerror = function() {
-          alert('Error reading file. Please try another photo.');
-          // Still draw the pass without a photo if reading fails
-          drawPass(nameInput, titleInput);
-          trackPass({
-            name: nameInput,
-            title: titleInput,
-            email: emailInput,
-            pass_number: passNumber,
-            organization: organizationInput || 'INDEPENDENT JOURNALIST'
-          }).catch(err => {
-            console.error('Error tracking press pass:', err);
-          });
-        };
-        reader.readAsDataURL(photoInput.files[0]);
-      } else {
-        // No photo selected: draw the pass with placeholder and record details
-        drawPass(nameInput, titleInput);
-        trackPass({
-          name: nameInput,
-          title: titleInput,
-          email: emailInput,
-          pass_number: passNumber,
-          organization: organizationInput || 'INDEPENDENT JOURNALIST'
-        }).catch(err => {
-          console.error('Error tracking press pass:', err);
-        });
-
       
       try {
         // Determine if a photo file has been selected
         const photoInput = document.getElementById('photo');
         if (photoInput.files && photoInput.files[0]) {
           const reader = new FileReader();
-          reader.onload = async function(e) {
+          reader.onload = function(e) {
             try {
               // Draw the pass including the uploaded photo
               drawPass(nameInput, titleInput, e.target.result);
               
-              // Check if API is available, otherwise use local database
-              const apiAvailable = await isApiAvailable().catch(() => false);
-              
-              if (apiAvailable) {
-                // Record the pass details in the backend
-                await trackPass({
-                  name: nameInput,
-                  title: titleInput,
-                  email: emailInput,
-                  pass_number: passNumber,
-                  organization: 'Full Court Press' // Adding organization field
-                });
+              // Record the pass details in the backend
+              trackPass({
+                name: nameInput,
+                title: titleInput,
+                email: emailInput,
+                pass_number: passNumber
+              }).then(() => {
                 showNotification('Press pass generated and saved successfully!');
-              } else {
-                // Use local database if API is not available
-                await db.addPass({
-                  name: nameInput,
-                  title: titleInput,
-                  email: emailInput,
-                  pass_number: passNumber,
-                  organization: 'Full Court Press'
-                });
-                showNotification('Press pass generated and saved locally. You can sync it later when online.');
-              }
+              }).catch(err => {
+                console.error('Error tracking press pass:', err);
+                showNotification('Error saving press pass: ' + err.message, 'error');
+              }).finally(() => {
+                // Reset button state
+                generateButton.innerHTML = originalText;
+                generateButton.disabled = false;
+              });
             } catch (err) {
               console.error('Error processing press pass:', err);
               showNotification('Error saving press pass: ' + err.message, 'error');
-            } finally {
               // Reset button state
               generateButton.innerHTML = originalText;
               generateButton.disabled = false;
@@ -912,13 +747,47 @@
           reader.onerror = function() {
             showNotification('Error reading file. Please try another photo.', 'error');
             // Still draw the pass without a photo if reading fails
-            processPassWithoutPhoto();
+            drawPass(nameInput, titleInput);
+            
+            // Record the pass details in the backend
+            trackPass({
+              name: nameInput,
+              title: titleInput,
+              email: emailInput,
+              pass_number: passNumber
+            }).then(() => {
+              showNotification('Press pass generated and saved successfully!');
+            }).catch(err => {
+              console.error('Error tracking press pass:', err);
+              showNotification('Error saving press pass: ' + err.message, 'error');
+            }).finally(() => {
+              // Reset button state
+              generateButton.innerHTML = originalText;
+              generateButton.disabled = false;
+            });
           };
           
           reader.readAsDataURL(photoInput.files[0]);
         } else {
-          // No photo selected: process without photo
-          processPassWithoutPhoto();
+          // No photo selected: draw the pass with placeholder and record details
+          drawPass(nameInput, titleInput);
+          
+          // Record the pass details in the backend
+          trackPass({
+            name: nameInput,
+            title: titleInput,
+            email: emailInput,
+            pass_number: passNumber
+          }).then(() => {
+            showNotification('Press pass generated and saved successfully!');
+          }).catch(err => {
+            console.error('Error tracking press pass:', err);
+            showNotification('Error saving press pass: ' + err.message, 'error');
+          }).finally(() => {
+            // Reset button state
+            generateButton.innerHTML = originalText;
+            generateButton.disabled = false;
+          });
         }
       } catch (err) {
         console.error('Error generating press pass:', err);
@@ -926,70 +795,7 @@
         generateButton.innerHTML = originalText;
         generateButton.disabled = false;
       }
-      
-      // Function to process pass without photo
-      async function processPassWithoutPhoto() {
-        try {
-          // Draw the pass without a photo
-          drawPass(nameInput, titleInput);
-          
-          // Check if API is available, otherwise use local database
-          const apiAvailable = await isApiAvailable().catch(() => false);
-          
-          if (apiAvailable) {
-            // Record the pass details in the backend
-            await trackPass({
-              name: nameInput,
-              title: titleInput,
-              email: emailInput,
-              pass_number: passNumber,
-              organization: 'Full Court Press'
-            });
-            showNotification('Press pass generated and saved successfully!');
-          } else {
-            // Use local database if API is not available
-            await db.addPass({
-              name: nameInput,
-              title: titleInput,
-              email: emailInput,
-              pass_number: passNumber,
-              organization: 'Full Court Press'
-            });
-            showNotification('Press pass generated and saved locally. You can sync it later when online.');
-          }
-        } catch (err) {
-          console.error('Error processing press pass:', err);
-          showNotification('Error saving press pass: ' + err.message, 'error');
-        } finally {
-          // Reset button state
-          generateButton.innerHTML = originalText;
-          generateButton.disabled = false;
-        }
- main
-      }
     });
-    
-    // Add CSS for spinner
-    const style = document.createElement('style');
-    style.textContent = `
-      .spinner {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        border: 3px solid rgba(255,255,255,.3);
-        border-radius: 50%;
-        border-top-color: #fff;
-        animation: spin 1s ease-in-out infinite;
-        margin-right: 10px;
-      }
-      
-      @keyframes spin {
-        to { transform: rotate(360deg); }
-      }
-    `;
-    document.head.appendChild(style);
   </script>
 </body>
 </html>
-
-
