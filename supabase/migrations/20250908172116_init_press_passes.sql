@@ -3,21 +3,27 @@
 -- This migration defines the table used to persist each press pass.
 -- It uses a bigint primary key with an identity column to ensure that
 -- each pass is assigned a unique numeric identifier.  Additional columns
--- capture the applicant’s name, email, a random pass identifier and the
+-- capture the applicant's name, email, a random pass identifier and the
 -- time of creation.  Adjust or extend this schema to suit your needs.
 
 -- Create the table if it does not already exist.  The id column is
--- generated automatically by PostgreSQL’s identity feature, and the
+-- generated automatically by PostgreSQL's identity feature, and the
 -- created_at column defaults to the current timestamp using now().
--- See Supabase’s migration guide for a similar example where an
+-- See Supabase's migration guide for a similar example where an
 -- employees table with a created_at column uses `default now()`【551237751746715†L140-L144】.
 create table if not exists public.press_passes (
   id             bigint primary key generated always as identity,
-  pass_number    uuid not null default gen_random_uuid(),
-  full_name      text not null,
+  pass_number    text not null,
+  name           text not null,
   email          text not null,
   title          text,
-  issued_at      timestamptz not null default now(),
+  created_at     timestamptz not null default now(),
+  -- Additional fields for payment tracking
+  paid           boolean not null default false,
+  payment_pending boolean not null default false,
+  payment_id     text,
+  payment_amount integer,
+  payment_date   timestamptz,
   -- Additional fields for auditability and revocation
   revoked        boolean not null default false,
   revoked_at     timestamptz,
