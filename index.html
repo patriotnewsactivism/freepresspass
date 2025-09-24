@@ -72,6 +72,98 @@
       opacity: 0.7;
       cursor: not-allowed;
     }
+    
+    /* Additional styles for the Save to Camera Roll button */
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .actions button {
+      padding: 10px 15px;
+      background-color: #2c3e50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .actions button:hover {
+      background-color: #1a252f;
+    }
+
+    /* Specific styling for the Save to Camera Roll button */
+    #saveToCamera {
+      background-color: #dc143c;
+    }
+
+    #saveToCamera:hover {
+      background-color: #b01030;
+    }
+
+    /* Mobile-specific styling */
+    @media (max-width: 768px) {
+      .actions {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      .actions button {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    }
+
+    /* Camera roll overlay styling */
+    .camera-roll-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .camera-roll-overlay .image-container {
+      max-width: 90%;
+      max-height: 70%;
+      overflow: auto;
+      margin: 20px 0;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .camera-roll-overlay img {
+      max-width: 100%;
+    }
+
+    .camera-roll-overlay button {
+      padding: 10px 20px;
+      background: #dc143c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .camera-roll-overlay button:hover {
+      background: #b01030;
+    }
   </style>
   <script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
   <!-- Structured Data for SEO -->
@@ -207,6 +299,7 @@
         <div class="actions">
           <button id="download">Download</button>
           <button id="openImage">Open Image</button>
+          <button id="saveToCamera">Save to Camera Roll</button>
         </div>
       </div>
     </div>
@@ -445,10 +538,61 @@
       // Role lines: Display organization if provided, otherwise INDEPENDENT JOURNALIST
       ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
       if (organization && organization.trim()) {
-        const orgLines = organization.trim().toUpperCase().split(/\\s+/);
-        orgLines.forEach((line, index) => {
-          ctx.fillText(line, rightCenterX, yPos + index * 20);
-        });
+        const orgText = organization.trim().toUpperCase();
+           const maxWidth = rightW - 20; // Leave some margin
+           
+           // Measure the full text width
+           const textWidth = ctx.measureText(orgText).width;
+           
+           if (textWidth <= maxWidth) {
+             // If the text fits on one line, display it as is
+             ctx.fillText(orgText, rightCenterX, yPos);
+             yPos += 20;
+           } else {
+             // If the text doesn't fit on one line, we need to split it
+             // Find a good breaking point to create two roughly equal lines
+             const words = orgText.split(/\s+/);
+             let line1 = ';
+             let line2 = ';
+             
+             // Try to balance the words between two lines
+             if (words.length === 1) {
+               // If it's a single long word, split it approximately in half
+               const midpoint = Math.floor(orgText.length / 2);
+               line1 = orgText.substring(0, midpoint) + '-';
+               line2 = orgText.substring(midpoint);
+             } else {
+               // Find the best split point for multiple words
+               let currentLine = ';
+               let bestSplitIndex = 0;
+               let minDifference = Infinity;
+               
+               for (let i = 0; i < words.length; i++) {
+                 if (i > 0) currentLine += ' ';
+                 currentLine += words[i];
+                 
+                 const firstHalfWidth = ctx.measureText(currentLine).width;
+                 const secondHalfText = words.slice(i + 1).join(' ');
+                 const secondHalfWidth = ctx.measureText(secondHalfText).width;
+                 
+                 const difference = Math.abs(firstHalfWidth - secondHalfWidth);
+                 
+                 if (difference < minDifference) {
+                   minDifference = difference;
+                   bestSplitIndex = i;
+                 }
+               }
+               
+               line1 = words.slice(0, bestSplitIndex + 1).join(' ');
+               line2 = words.slice(bestSplitIndex + 1).join(' ');
+             }
+             
+             // Draw the two lines
+             ctx.fillText(line1, rightCenterX, yPos);
+             yPos += 20;
+             ctx.fillText(line2, rightCenterX, yPos);
+             yPos += 20;
+           }
         yPos += orgLines.length * 20;
       } else {
         ctx.fillText('INDEPENDENT', rightCenterX, yPos);
@@ -554,6 +698,69 @@
     document.getElementById('openImage').addEventListener('click', () => {
       const dataUrl = canvas.toDataURL('image/png');
       window.open(dataUrl, '_blank');
+    });
+    
+    // Save to Camera Roll functionality
+    document.getElementById('saveToCamera').addEventListener('click', async () => {
+      try {
+        // Get the canvas data
+        const dataUrl = canvas.toDataURL('image/png');
+        
+        // For iOS devices
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+          // Create a temporary link
+          const link = document.createElement('a');
+          link.href = dataUrl;
+          link.download = 'press-pass.png';
+          
+          // Create a temporary image for iOS
+          const img = document.createElement('img');
+          img.src = dataUrl;
+          img.style.maxWidth = '100%';
+          
+          // Create a message for the user
+          const message = document.createElement('div');
+          message.className = 'camera-roll-overlay';
+          message.innerHTML = `
+            <h3>Save to Camera Roll</h3>
+            <p>Press and hold the image below, then select "Save Image" to save to your camera roll.</p>
+            <div class="image-container">
+              <img src="${dataUrl}" alt="Press Pass">
+            </div>
+            <button id="closeOverlay">Close</button>
+          `;
+          
+          // Add to document
+          document.body.appendChild(message);
+          
+          // Add close button functionality
+          document.getElementById('closeOverlay').addEventListener('click', () => {
+            document.body.removeChild(message);
+          });
+        } 
+        // For Android devices
+        else if (/Android/.test(navigator.userAgent)) {
+          // For Android, we'll use the download attribute but with a different approach
+          const link = document.createElement('a');
+          link.href = dataUrl;
+          link.download = 'press-pass.png';
+          link.click();
+          
+          // Show instructions for Android
+          showNotification('Image downloaded. Check your Downloads folder or Gallery.', 'info', 5000);
+        }
+        // For desktop browsers
+        else {
+          // Use standard download
+          const link = document.createElement('a');
+          link.href = dataUrl;
+          link.download = 'press-pass.png';
+          link.click();
+        }
+      } catch (error) {
+        console.error('Error saving to camera roll:', error);
+        showNotification('Failed to save to camera roll', 'error');
+      }
     });
     
     // Checkout functionality
