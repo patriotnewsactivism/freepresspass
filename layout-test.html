@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Press Pass Layout Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+        }
+        .form-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            flex: 1;
+        }
+        .preview-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            flex: 1;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            max-width: 100%;
+        }
+        .comparison {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .comparison div {
+            flex: 1;
+            text-align: center;
+        }
+        .comparison h3 {
+            color: #2c3e50;
+        }
+    </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <h1>Press Pass Layout Optimization Test</h1>
+    
+    <div class="container">
+        <div class="form-section">
+            <h2>Test Form</h2>
+            <label>Full Name:</label>
+            <input type="text" id="name" placeholder="Enter test name" value="John Smith">
+            
+            <label>Organization:</label>
+            <input type="text" id="title" placeholder="Test Organization" value="Independent News">
+        </div>
+        
+        <div class="preview-section">
+            <h2>Optimized Layout</h2>
+            <canvas id="passCanvas" width="400" height="600"></canvas>
+        </div>
+    </div>
+
+    <div class="comparison">
+        <div>
+            <h3>Layout Changes Made:</h3>
+            <ul style="text-align: left;">
+                <li><strong>Photo X Position:</strong> 25px → 35px (better centering)</li>
+                <li><strong>Photo Y Position:</strong> 140px → 130px (better space usage)</li>
+                <li><strong>Photo Width:</strong> 150px → 160px (larger, better proportion)</li>
+                <li><strong>Photo Height:</strong> 180px → 190px (larger, better proportion)</li>
+                <li><strong>Column Gap:</strong> 20px → 15px (better space utilization)</li>
+                <li><strong>Right Margin:</strong> 25px → 20px (more space for text)</li>
+                <li><strong>Name Y Position:</strong> photoY+25 → photoY+20 (better spacing)</li>
+                <li><strong>Footer Spacing:</strong> photoY+photoH+30 → photoY+photoH+25 (optimized)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('passCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        function genPassId() {
+            return 'pass-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+        }
+        
+        function drawPass(name, title, photoSrc = null) {
+            const displayName = name && name.trim() ? name.trim() : 'YOUR NAME HERE';
+            const displayTitle = title && title.trim() ? title.trim() : 'INDEPENDENT JOURNALIST';
+            
+            // Clear canvas and set background
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Outer border
+            ctx.strokeStyle = '#2c3e50';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
+            
+            // Top header bar
+            const headerHeight = 60;
+            ctx.fillStyle = '#dc143c';
+            ctx.fillRect(5, 5, canvas.width - 10, headerHeight);
+            ctx.textAlign = 'center';
+            ctx.font = 'bold 28px "Helvetica", Arial, sans-serif';
+            ctx.strokeStyle = '#1a252f';
+            ctx.lineWidth = 2;
+            ctx.strokeText('PRESS CREDENTIAL', canvas.width / 2, 5 + headerHeight / 2 + 10);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText('PRESS CREDENTIAL', canvas.width / 2, 5 + headerHeight / 2 + 10);
+            
+            // Subheading
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
+            ctx.fillText('CONSTITUTIONAL PRESS', canvas.width / 2, 5 + headerHeight + 28);
+            
+            // OPTIMIZED PHOTO DIMENSIONS
+            const photoX = 35;  // Moved right for better centering
+            const photoY = 130; // Moved up for better space usage
+            const photoW = 160; // Increased width
+            const photoH = 190; // Increased height
+            const rightX = photoX + photoW + 15; // Reduced gap
+            const rightW = canvas.width - rightX - 20; // Optimized width
+            
+            // Photo area with improved positioning
+            ctx.strokeStyle = '#2c3e50';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(photoX, photoY, photoW, photoH);
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('PHOTO', photoX + photoW / 2, photoY + photoH / 2);
+            
+            // Right column with optimized spacing
+            const rightCenterX = rightX + rightW / 2;
+            let yPos = photoY + 20; // Improved starting position
+            
+            // Name
+            ctx.fillStyle = '#2c3e50';
+            ctx.textAlign = 'center';
+            const nameParts = displayName.toUpperCase().split(/\s+/);
+            nameParts.forEach(part => {
+                ctx.font = 'bold 24px "Helvetica", Arial, sans-serif';
+                ctx.fillText(part, rightCenterX, yPos);
+                yPos += 28;
+            });
+            
+            yPos += 5;
+            
+            // Title/Role
+            ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
+            if (displayTitle && displayTitle !== 'INDEPENDENT JOURNALIST') {
+                const titleText = displayTitle.toUpperCase();
+                ctx.fillText(titleText, rightCenterX, yPos);
+                yPos += 20;
+            } else {
+                ctx.fillText('INDEPENDENT', rightCenterX, yPos);
+                yPos += 20;
+                ctx.fillText('JOURNALIST', rightCenterX, yPos);
+                yPos += 20;
+            }
+            
+            // Footer section with optimized spacing
+            let baseY = photoY + photoH + 25; // Reduced spacing
+            const id = genPassId();
+            ctx.font = '14px "Helvetica", Arial, sans-serif';
+            ctx.fillText(`ID: ${id}`, canvas.width / 2, baseY);
+            baseY += 18;
+            
+            ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
+            ctx.fillText('ISSUED BY', canvas.width / 2, baseY);
+            baseY += 16;
+            ctx.fillText('CONSTITUTIONAL PRESS ASSOCIATION', canvas.width / 2, baseY);
+            baseY += 18;
+            
+            const expDate = new Date(new Date().getFullYear() + 2, 11, 31);
+            ctx.fillStyle = '#dc143c';
+            ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
+            ctx.fillText(`VALID THROUGH DEC 31, ${expDate.getFullYear()}`, canvas.width / 2, baseY);
+            baseY += 26;
+            
+            ctx.fillStyle = '#1a252f';
+            ctx.font = 'bold 11px "Helvetica", Arial, sans-serif';
+            const legalLines = [
+                'THIS JOURNALIST IS RECOGNIZED UNDER THE PROTECTIONS',
+                'OF THE FIRST AMENDMENT OF THE U.S. CONSTITUTION.',
+                'ANY INTERFERENCE WILL BE A VIOLATION OF FEDERAL LAW.'
+            ];
+            legalLines.forEach((t, i) => {
+                ctx.fillText(t, canvas.width / 2, baseY + i * 14);
+            });
+            baseY += legalLines.length * 14 + 16;
+            
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 10px "Helvetica", Arial, sans-serif';
+            const noteLines = [
+                'Do not hinder, exclude, or block the view of this journalist',
+                'in the exercise of court-recognized First Amendment rights.'
+            ];
+            noteLines.forEach((t, i) => {
+                ctx.fillText(t, canvas.width / 2, baseY + i * 14);
+            });
+            
+            return id;
+        }
+        
+        // Initialize
+        drawPass('John Smith', 'Independent News');
+        
+        // Real-time updates
+        document.getElementById('name').addEventListener('input', function() {
+            const nameValue = this.value.trim();
+            const titleValue = document.getElementById('title').value.trim();
+            drawPass(nameValue || 'YOUR NAME HERE', titleValue);
+        });
+        
+        document.getElementById('title').addEventListener('input', function() {
+            const nameValue = document.getElementById('name').value.trim();
+            const titleValue = this.value.trim();
+            drawPass(nameValue || 'YOUR NAME HERE', titleValue);
+        });
+    </script>
+</body>
+</html>

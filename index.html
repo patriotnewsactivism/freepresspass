@@ -464,16 +464,16 @@
       ctx.fillText('CONSTITUTIONAL PRESS', canvas.width / 2, 5 + headerHeight + 28);
 
       // Dimensions for photo and right-hand column
-      const photoX = 25;
+      const photoX = 35;
       // Position the photo area below the header and subheading.  This ensures
       // adequate spacing between the red bar and the credential content.  The
       // y‑coordinate accounts for the 5px padding, 60px header, subheading and
       // an extra margin of 20px.
-      const photoY = 140;
-      const photoW = 150;
-      const photoH = 180;
-      const rightX = photoX + photoW + 20;
-      const rightW = canvas.width - rightX - 25;
+      const photoY = 130;
+      const photoW = 160;
+      const photoH = 190;
+      const rightX = photoX + photoW + 15;
+      const rightW = canvas.width - rightX - 20;
 
       // Photo area: draw border and either the supplied image or a placeholder label.
       ctx.strokeStyle = '#2c3e50';
@@ -506,7 +506,7 @@
       // space for the header bar and subheading.  Each subsequent line is
       // offset by a consistent spacing to keep the content within the
       // constrained height.
-      let yPos = photoY + 25;
+      let yPos = photoY + 20;
       // Draw the passholder's name, split into stacked lines.
       ctx.fillStyle = '#2c3e50';
       ctx.textAlign = 'center';
@@ -586,7 +586,7 @@
       }
 
       // Baseline for metadata section
-      let baseY = photoY + photoH + 30;
+      let baseY = photoY + photoH + 25;
       // Footer brand line
       // footer brand removed per instruction
       // Generate unique ID
