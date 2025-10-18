@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "stripe": "^14.4.0"
-  }
+  },
   "keywords": ["press-pass", "journalism", "first-amendment"],
   "author": "Constitutional Press Association",
   "license": "MIT"
