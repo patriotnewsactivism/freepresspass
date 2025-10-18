@@ -521,33 +521,33 @@
       yPos += 5;
       // Role lines: Display title if provided, otherwise INDEPENDENT JOURNALIST
       ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
-      if (organization && organization.trim()) {
-        const orgText = organization.trim().toUpperCase();
+      if (displayTitle && displayTitle !== 'INDEPENDENT JOURNALIST') {
+        const titleText = displayTitle.toUpperCase();
            const maxWidth = rightW - 20; // Leave some margin
            
            // Measure the full text width
-           const textWidth = ctx.measureText(orgText).width;
+           const textWidth = ctx.measureText(titleText).width;
            
            if (textWidth <= maxWidth) {
              // If the text fits on one line, display it as is
-             ctx.fillText(orgText, rightCenterX, yPos);
+             ctx.fillText(titleText, rightCenterX, yPos);
              yPos += 20;
            } else {
              // If the text doesn't fit on one line, we need to split it
              // Find a good breaking point to create two roughly equal lines
-             const words = orgText.split(/\s+/);
-             let line1 = ';
-             let line2 = ';
+             const words = titleText.split(/\s+/);
+             let line1 = '';
+             let line2 = '';
              
              // Try to balance the words between two lines
              if (words.length === 1) {
                // If it's a single long word, split it approximately in half
-               const midpoint = Math.floor(orgText.length / 2);
-               line1 = orgText.substring(0, midpoint) + '-';
-               line2 = orgText.substring(midpoint);
+               const midpoint = Math.floor(titleText.length / 2);
+               line1 = titleText.substring(0, midpoint) + '-';
+               line2 = titleText.substring(midpoint);
              } else {
                // Find the best split point for multiple words
-               let currentLine = ';
+               let currentLine = '';
                let bestSplitIndex = 0;
                let minDifference = Infinity;
                
@@ -577,12 +577,11 @@
              ctx.fillText(line2, rightCenterX, yPos);
              yPos += 20;
            }
-        yPos += orgLines.length * 20;
       } else {
         ctx.fillText('INDEPENDENT', rightCenterX, yPos);
         yPos += 20;
         ctx.fillText('JOURNALIST', rightCenterX, yPos);
-        yPos += 20;
+           yPos += 20;
       }
 
       // Baseline for metadata section

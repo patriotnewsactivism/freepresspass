@@ -20,7 +20,7 @@ exports.handler = async (event) => {
       statusCode: 405,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*', // Adjust in production
+        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type'
       },
       body: JSON.stringify({ error: 'Method not allowed' })
@@ -36,7 +36,7 @@ exports.handler = async (event) => {
         statusCode: 400,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // Adjust in production
+          'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Headers': 'Content-Type'
         },
         body: JSON.stringify({ error: 'Missing required fields: name, email, or pass_number' })
@@ -50,19 +50,29 @@ exports.handler = async (event) => {
         statusCode: 400,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // Adjust in production
+          'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Headers': 'Content-Type'
         },
         body: JSON.stringify({ error: 'Invalid email format' })
       };
     }
 
-    // Prepare the payload with consistent field names
+    // Extract device and request information
+    const userAgent = event.headers['user-agent'] || 'Unknown';
+    const ipAddress = event.headers['x-forwarded-for'] || 
+                     event.headers['x-real-ip'] || 
+                     'Unknown';
+    const referer = event.headers['referer'] || event.headers['referrer'] || null;
+    
+    // Prepare the payload with consistent field names and device tracking
     const payload = {
       name: data.name,
       title: data.title || null,
       email: data.email,
       pass_number: data.pass_number,
+      user_agent: userAgent,
+      ip_address: ipAddress,
+      referer: referer,
       created_at: new Date().toISOString()
     };
 
@@ -78,7 +88,7 @@ exports.handler = async (event) => {
         statusCode: 500,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // Adjust in production
+          'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Headers': 'Content-Type'
         },
         body: JSON.stringify({ 
@@ -94,7 +104,7 @@ exports.handler = async (event) => {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*', // Adjust in production
+        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type'
       },
       body: JSON.stringify({
@@ -109,7 +119,7 @@ exports.handler = async (event) => {
       statusCode: 500,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*', // Adjust in production
+        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type'
       },
       body: JSON.stringify({ 
