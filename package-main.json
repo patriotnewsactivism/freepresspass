@@ -1,0 +1,17 @@
+{
+  "name": "freepresspass",
+  "version": "1.0.0",
+  "description": "Free Press Pass Generator with Stripe Integration",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo \"No build step required\""
+  },
+  "dependencies": {
+    "stripe": "^14.4.0",
+    "@supabase/supabase-js": "^2.0.0"
+  },
+  "keywords": ["press-pass", "journalism", "first-amendment"],
+  "author": "Constitutional Press Association",
+  "license": "MIT"
+}
