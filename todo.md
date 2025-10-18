@@ -1,31 +1,35 @@
-# Final Press Pass Layout Adjustments
+# Free Press Pass Implementation Plan
 
-## Required Adjustments:
-- [ ] Move photo up slightly (come up a tad)
-- [ ] Move name section down slightly (come down a tad)
-- [ ] Verify all other functions still work correctly
-- [ ] Test preview generation with all adjustments
-- [ ] Ensure no JavaScript errors
-- [ ] Verify database tracking still works
-- [ ] Test admin dashboard functionality
-- [ ] Final comprehensive check
+## 1. Repository Setup
+- [x] Create directory structure
+- [x] Set up basic HTML template
+- [x] Create CSS styling files
+- [x] Set up JavaScript functionality
 
-## Testing:
-- [ ] Photo positioning is perfectly centered
-- [ ] Name section properly aligned
-- [ ] All text elements visible and readable
-- [ ] No overcrowding or spacing issues
-- [ ] All functionality works as expected
+## 2. Content Updates
+- [x] Remove all "Maple Leaf" references
+- [x] Update header from "Free Constitutional Press" to "Constitutional Press"
+- [x] Replace "professional headshot photo" with "Add Photo"
 
----
+## 3. Press Pass Layout
+- [x] Implement vertical layout
+- [x] Increase photo size
+- [x] Match font sizes from the sample
+- [x] Update "Investigative Reporter" to "Investigative Journalist"
+- [x] Ensure mobile saving works correctly
 
-## 🎯 Final Optimization Goal
-Achieve perfect vertical centering between photo and name sections while maintaining all functionality
+## 4. Exposure Reports Tab
+- [x] Fix non-working tab
+- [x] Implement proper loading mechanism
 
-## Previous Fixes (Already Completed)
-- [x] Fixed press pass preview not showing (JavaScript errors)
-- [x] Enhanced database tracking with device info, IP, referer
-- [x] Redesigned admin dashboard with search, filter, sort, export
-- [x] Fixed button text and real-time name updates
-- [x] Implemented photo upload functionality
-- [x] All previous issues resolved in PR #15 and #16
+## 5. Database Tracking
+- [x] Implement backend tracking solution
+
+## 6. Stripe Integration
+- [x] Set up Stripe checkout functionality
+- [x] Add Stripe API keys integration
+
+## 7. Netlify Deployment
+- [x] Create netlify.toml configuration
+- [x] Set up Netlify Functions
+- [x] Create deployment script

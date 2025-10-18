@@ -1,227 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Generate your free digital press pass for journalism activities. Get recognized under First Amendment protections with our Constitutional Press accreditation.">
-    <meta name="keywords" content="press pass, journalist credentials, media accreditation, first amendment, freedom of press, constitutional press, investigative journalist">
-    <meta name="author" content="Constitutional Press Association">
-    
-    <!-- Open Graph / Social Media Meta Tags -->
-    <meta property="og:title" content="Free Press Pass Generator">
-    <meta property="og:description" content="Generate your free digital press pass for journalism activities. Get recognized under First Amendment protections.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://freepresspass.com">
-    <meta property="og:image" content="/assets/press-pass-preview.jpg">
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Free Press Pass Generator">
-    <meta name="twitter:description" content="Generate your free digital press pass for journalism activities. Get recognized under First Amendment protections.">
-    <meta name="twitter:image" content="/assets/press-pass-preview.jpg">
-    
-    <title>Free Press Pass Generator | First Amendment Journalist Credentials</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Error message styling */
-        .error-message {
-            color: #f44336;
-            font-size: 0.8rem;
-            margin-top: 5px;
-            min-height: 1.2em;
-        }
-        
-        /* Form validation styling */
-        input:invalid {
-            border-color: #f44336;
-        }
-        
-        /* Notification system styling */
-        #notification {
-            display: none;
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 5px;
-            color: white;
-            font-weight: bold;
-            z-index: 1000;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            transition: opacity 0.3s ease-in-out;
-        }
-        
-        /* Loading spinner for buttons */
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        /* Disable button styling */
-        button:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-        
-        /* Additional styles for the Save to Camera Roll button */
-        .actions {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-    
-        .actions button {
-            padding: 10px 15px;
-            background-color: #2c3e50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-    
-        .actions button:hover {
-            background-color: #1a252f;
-        }
-    
-        /* Specific styling for the Save to Camera Roll button */
-        #saveToCamera {
-            background-color: #dc143c;
-        }
-    
-        #saveToCamera:hover {
-            background-color: #b01030;
-        }
-    </style>
-<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
-</head>
-<body>
-    <header role="banner">
-        <div class="header-content">
-            <h1>Free Press Pass Generator</h1>
-            <p>Generate your digital press credentials under First Amendment protections</p>
-        </div>
-    </header>
-
-    <nav role="navigation" aria-label="Main navigation">
-        <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#generate">Generate Pass</a></li>
-            <li><a href="#faq">FAQ</a></li>
-        </ul>
-    </nav>
-
-    <main role="main">
-        <section id="about">
-            <h2>About Constitutional Press Credentials</h2>
-            <p>Constitutional Press accreditation provides independent journalists with credentials that assert First Amendment protections for gathering and disseminating news. These credentials are recognized by many organizations and can help journalists gain access to events, press conferences, and public spaces where media credentials are required.</p>
-            
-            <div class="press-info">
-                <h3>What is The Press?</h3>
-                <p><strong>The Press</strong> refers to news media organizations, journalists, and individuals who gather, verify, and disseminate information to the public. This includes traditional newspapers, television news, radio journalism, digital publications, independent journalists, bloggers, podcasters, and citizen journalists who report on matters of public interest.</p>
-                <p>The press serves as a crucial check on government power and provides citizens with the information necessary for democratic participation. The term encompasses both institutional media organizations and individual journalists working independently.</p>
-            </div>
-        </section>
-        
-        <section id="generate">
-            <div class="container">
-                <div class="form-section">
-                    <h2>Generate Your Press Pass</h2>
-                    <form id="pressPassForm">
-                        <div class="form-group">
-                            <label for="name">Full Name:</label>
-                            <input type="text" id="name" name="name" placeholder="Your full name" required>
-                            <div class="error-message" id="name-error"></div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="title">Organization Name (if applicable):</label>
-                            <input type="text" id="title" name="title" 
-                                   placeholder="Your organization name (if applicable)"
-                                   oninput="this.style.borderColor = this.value ? '' : 'red'">
-                            <div class="error-message" id="title-error"></div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email">Email Address:</label>
-                            <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
-                            <div class="error-message" id="email-error"></div>
-                            <small>This is used only for tracking and will not be shared.</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="photo">Photo (optional):</label>
-                            <input type="file" id="photo" name="photo" accept="image/*">
-                            <small>For best results, use a clear headshot photo</small>
-                        </div>
-                        
-                        <button type="submit" id="generateBtn">
-                            <span class="spinner" id="generateSpinner" style="display: none;"></span>
-                            Generate Press Pass
-                        </button>
-                    </form>
-                </div>
-                
-                <div class="preview-section">
-                    <h2>Press Pass Preview</h2>
-                    <canvas id="pressPassCanvas" width="600" height="400"></canvas>
-                    <div class="actions">
-                        <button id="downloadBtn" onclick="downloadPass('download')">Download Press Pass</button>
-                        <button id="printBtn" onclick="downloadPass('print')">Print Press Pass</button>
-                        <button id="saveToCamera" onclick="saveToCameraRoll()">Save to Camera Roll</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <section id="faq">
-            <h2>Frequently Asked Questions</h2>
-            
-            <div class="faq-item">
-                <h3>What is a Constitutional Press credential?</h3>
-                <p>A Constitutional Press credential is a digital press pass that asserts your rights under the First Amendment of the U.S. Constitution as a member of the press. While not a government-issued document, it can help establish your status as a journalist when seeking access to public events or spaces.</p>
-            </div>
-            
-            <div class="faq-item">
-                <h3>Is this credential legally binding?</h3>
-                <p>The credential serves as evidence of your claim to press status, but it does not confer special legal privileges beyond those already protected by the First Amendment. It can be helpful in asserting your rights when challenged, but law enforcement and venue security have ultimate authority over access.</p>
-            </div>
-            
-            <div class="faq-item">
-                <h3>Do I need to be a professional journalist to use this?</h3>
-                <p>No. The First Amendment protects press freedoms for everyone, not just professional journalists. Whether you're a blogger, independent reporter, citizen journalist, or student working on a project, you have the right to gather and report news.</p>
-            </div>
-            
-            <div class="faq-item">
-                <h3>How long is the credential valid?</h3>
-                <p>All credentials are valid through December 31 of two years from the current date. This ensures that the credential remains current while not requiring constant renewal.</p>
-            </div>
-        </section>
-    </main>
-
-    <footer role="contentinfo">
-        <div class="footer-content">
-            <p>Constitutional Press Association &copy; 2025</p>
-            <p>Asserting First Amendment Rights for Independent Journalists</p>
-        </div>
-    </footer>
-
-    <div id="notification"></div>
-
-    <script>
+<script>
         const canvas = document.getElementById('pressPassCanvas');
         const ctx = canvas.getContext('2d');
         let currentPhotoSrc = null;
@@ -230,6 +7,34 @@
         window.onload = function() {
             drawPass('John Doe', 'Investigative Journalist');
         };
+
+        //
+        // --- THIS IS THE FIX ---
+        // Add real-time update listeners for Name and Title fields
+        //
+        document.getElementById('name').addEventListener('input', function(e) {
+            const name = e.target.value;
+            const title = document.getElementById('title').value;
+            const photoFile = document.getElementById('photo').files[0];
+            
+            if (photoFile && !currentPhotoSrc) {
+                // If photo is selected but not drawn, load it
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentPhotoSrc = e.target.result;
+                    drawPass(name, title, currentPhotoSrc);
+                };
+                reader.readAsDataURL(photoFile);
+            } else {
+                drawPass(name, title, currentPhotoSrc);
+            }
+        });
+
+        document.getElementById('title').addEventListener('input', function(e) {
+            const name = document.getElementById('name').value;
+            const title = e.target.value;
+            drawPass(name, title, currentPhotoSrc);
+        });
         
         // Form submission handler
         document.getElementById('pressPassForm').addEventListener('submit', function(e) {
@@ -277,6 +82,7 @@
                 };
                 reader.readAsDataURL(photoFile);
             } else {
+                currentPhotoSrc = null; // Clear photo if none is selected
                 drawPass(name, title);
                 // Hide loading spinner
                 document.getElementById('generateSpinner').style.display = 'none';
@@ -337,10 +143,6 @@
             
             // Dimensions for photo and right-hand column
             const photoX = 25;
-            // Position the photo area below the header and subheading.  This ensures
-            // adequate spacing between the red bar and the credential content.  The
-            // y‑coordinate accounts for the 5px padding, 60px header, subheading and
-            // an extra margin of 20px.
             const photoY = 140;
             const photoW = 150;
             const photoH = 180;
@@ -385,9 +187,9 @@
             // Calculate starting Y position to center both name and title
             let nameBlockHeight = nameParts.length * 28;
             // Also account for title height (approximately 2 lines of 20px each)
-               let titleBlockHeight = 40;
-               let totalBlockHeight = nameBlockHeight + 5 + titleBlockHeight; // 5px gap between name and title
-               let yPos = photoCenterY - (totalBlockHeight / 2);
+            let titleBlockHeight = 40;
+            let totalBlockHeight = nameBlockHeight + 5 + titleBlockHeight; // 5px gap between name and title
+            let yPos = photoCenterY - (totalBlockHeight / 2);
             
             nameParts.forEach(part => {
                 ctx.font = 'bold 24px "Helvetica", Arial, sans-serif';
@@ -400,7 +202,7 @@
             
             // Role lines: Display title if provided, otherwise INDEPENDENT JOURNALIST
             ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
-            if (displayTitle && displayTitle.trim()) {
+            if (displayTitle && displayTitle.trim() && displayTitle.toUpperCase() !== 'INDEPENDENT JOURNALIST') {
                 const titleText = displayTitle.trim().toUpperCase();
                 const maxWidth = rightW - 20; // Leave some margin
                 
@@ -413,19 +215,15 @@
                     yPos += 20;
                 } else {
                     // If the text doesn't fit on one line, we need to split it
-                    // Find a good breaking point to create two roughly equal lines
                     const words = titleText.split(/\s+/);
                     let line1 = '';
                     let line2 = '';
                     
-                    // Try to balance the words between two lines
                     if (words.length === 1) {
-                        // If it's a single long word, split it approximately in half
                         const midpoint = Math.floor(titleText.length / 2);
                         line1 = titleText.substring(0, midpoint) + '-';
                         line2 = titleText.substring(midpoint);
                     } else {
-                        // Find the best split point for multiple words
                         let currentLine = '';
                         let bestSplitIndex = 0;
                         let minDifference = Infinity;
@@ -453,8 +251,10 @@
                     // Draw the two lines
                     ctx.fillText(line1, rightCenterX, yPos);
                     yPos += 20;
-                    ctx.fillText(line2, rightCenterX, yPos);
-                    yPos += 20;
+                    if (line2) { // Only draw line 2 if it exists
+                        ctx.fillText(line2, rightCenterX, yPos);
+                        yPos += 20;
+                    }
                 }
             } else {
                 ctx.fillText('INDEPENDENT', rightCenterX, yPos);
@@ -509,44 +309,57 @@
             const email = document.getElementById('email').value;
             
             if (!name || !email) {
-                showNotification('Please fill in your name and email to download', 'error');
+                showNotification('Please fill in your name and email first', 'error');
                 return;
             }
             
-            // Validate email format
-            if (!isValidEmail(email)) {
-                showNotification('Please enter a valid email address', 'error');
-                return;
-            }
-            
-            // Generate pass ID
-            const passNumber = genPassId();
+            // Generate a pass number for tracking
+            const passNumber = Math.floor(Math.random() * 1000000);
             
             // Track the pass generation
-            fetch('/.netlify/functions/track-pass', {
+            fetch('/api/track-pass', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     name: name,
-                    title: title || null,
+                    title: title,
                     email: email,
-                    pass_number: passNumber,
-                    download_type: downloadType
+                    pass_number: `CPP-${passNumber}`,
+                    user_agent: navigator.userAgent,
+                    timestamp: new Date().toISOString()
                 }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log('Pass tracked successfully');
-                } else {
-                    console.error('Error tracking pass:', data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error tracking pass:', error);
+            }).catch(error => {
+                console.error('Tracking error (non-critical):', error);
             });
+            
+            if (downloadType === 'print') {
+                // For print, we create a new window with just the image
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Print Press Pass</title>
+                            <style>
+                                body { margin: 0; padding: 20px; text-align: center; font-family: Arial, sans-serif; }
+                                img { max-width: 100%; height: auto; }
+                                .instructions { margin-top: 20px; font-size: 14px; }
+                            </style>
+                        </head>
+                        <body>
+                            <img src="${canvas.toDataURL('image/png')}" alt="Press Pass" />
+                            <div class="instructions">
+                                <p>Press <strong>Ctrl+P</strong> (or <strong>Cmd+P</strong> on Mac) to print this press pass.</p>
+                                <p>For best results, print on cardstock and laminate for durability.</p>
+                            </div>
+                        </body>
+                    </html>
+                `);
+                printWindow.document.close();
+                printWindow.focus();
+                return;
+            }
             
             // Download the pass
             const link = document.createElement('a');
@@ -570,43 +383,29 @@
             const email = document.getElementById('email').value;
             
             if (!name || !email) {
-                showNotification('Please fill in your name and email to save', 'error');
+                showNotification('Please fill in your name and email first', 'error');
                 return;
             }
             
-            // Validate email format
-            if (!isValidEmail(email)) {
-                showNotification('Please enter a valid email address', 'error');
-                return;
-            }
+            // Generate a pass number for tracking
+            const passNumber = Math.floor(Math.random() * 1000000);
             
-            // Generate pass ID
-            const passNumber = genPassId();
-            
-            // Track the pass generation with save type
-            fetch('/.netlify/functions/track-pass', {
+            // Track the pass generation
+            fetch('/api/track-pass', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     name: name,
-                    title: title || null,
+                    title: title,
                     email: email,
-                    pass_number: passNumber,
-                    download_type: 'camera_roll'
+                    pass_number: `CPP-${passNumber}`,
+                    user_agent: navigator.userAgent,
+                    timestamp: new Date().toISOString()
                 }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log('Pass tracked successfully');
-                } else {
-                    console.error('Error tracking pass:', data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error tracking pass:', error);
+            }).catch(error => {
+                console.error('Tracking error (non-critical):', error);
             });
             
             // Try to save to camera roll
@@ -616,24 +415,17 @@
                 link.download = `press-pass-${passNumber}.png`;
                 link.href = canvas.toDataURL('image/png');
                 
-                // Add text indicating it's for camera roll
-                const text = document.createElement('p');
-                text.textContent = 'Press Pass - Long press and save to camera roll';
-                text.style.textAlign = 'center';
-                text.style.fontWeight = 'bold';
-                text.style.marginTop = '10px';
-                
-                // Create a temporary container for both image and text
+                // Create a temporary container
                 const container = document.createElement('div');
                 container.appendChild(link);
-                container.appendChild(text);
                 
-                // Trigger download
+                // Add to document, click, and remove
+                document.body.appendChild(container);
                 link.click();
+                document.body.removeChild(container);
                 
-                showNotification('Press pass saved! Check your downloads or photos app.', 'success');
+                showNotification('Press pass image ready! Long press and save to camera roll.', 'success');
             } catch (error) {
-                console.error('Error saving to camera roll:', error);
                 showNotification('Error saving to camera roll. Please try downloading instead.', 'error');
             }
         }
@@ -641,19 +433,23 @@
         function showNotification(message, type) {
             const notification = document.getElementById('notification');
             notification.textContent = message;
+            notification.className = `notification ${type}`;
             notification.style.display = 'block';
-            
-            if (type === 'error') {
-                notification.style.backgroundColor = '#f44336';
-            } else {
-                notification.style.backgroundColor = '#4CAF50';
-            }
             
             // Hide after 3 seconds
             setTimeout(() => {
                 notification.style.display = 'none';
             }, 3000);
         }
+        
+        // Stripe checkout function (placeholder)
+        function checkout() {
+            showNotification('Redirecting to secure checkout...', 'success');
+            
+            // In a real implementation, this would integrate with Stripe
+            // For now, we'll just redirect to a placeholder
+            setTimeout(() => {
+                window.location.href = 'https://buy.stripe.com/test_placeholder';
+            }, 1000);
+        }
     </script>
-</body>
-</html>

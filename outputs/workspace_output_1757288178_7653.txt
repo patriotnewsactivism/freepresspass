@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Constitutional Press Pass</title>
+  <link rel="stylesheet" href="styles.css">
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Constitutional Press</h1>
+  </header>
+  
+  <main>
+    <div class="container">
+      <div class="form-section">
+        <h2>Generate Your Press Pass</h2>
+        <form id="passForm" netlify>
+          <input type="hidden" name="form-name" value="press-passes" />

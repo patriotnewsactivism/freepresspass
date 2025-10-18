@@ -1,0 +1,10 @@
+[main d462a18] Complete implementation of Free Press Pass with Netlify deployment and Stripe integration
+ 9 files changed, 584 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 index.html
+ create mode 100644 netlify.toml
+ create mode 100644 netlify/functions/create-checkout-session.js
+ create mode 100644 package.json
+ create mode 100755 scripts/go.sh
+ create mode 100644 styles.css
+ create mode 100644 success.html
