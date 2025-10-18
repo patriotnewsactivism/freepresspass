@@ -1,27 +1,35 @@
-# Free Press Pass Generator Fixes
+# Free Press Pass Implementation Plan
 
-## Issues Identified
-- [x] The name is not updating properly on the press pass - it shows "YOUR NAME HERE" by default and only updates after clicking the Generate Press Pass button
-- [x] The button text needs to be updated to "Generate FREE Press Pass Now" with "FREE" emphasized
-- [x] The second button needs to say "Enhanced/Laminated Version $15" instead of "Get Laminated Pass ($10-15)"
-- [x] Need to ensure data is being saved to the database properly
+## 1. Repository Setup
+- [x] Create directory structure
+- [x] Set up basic HTML template
+- [x] Create CSS styling files
+- [x] Set up JavaScript functionality
 
-## Solutions
+## 2. Content Updates
+- [x] Remove all "Maple Leaf" references
+- [x] Update header from "Free Constitutional Press" to "Constitutional Press"
+- [x] Replace "professional headshot photo" with "Add Photo"
 
-### 1. Fix the Name Update Issue
-- [x] Identify the issue in the drawPass function in index.html
-- [x] Modify the code to update the name on the press pass in real-time as the user types
+## 3. Press Pass Layout
+- [x] Implement vertical layout
+- [x] Increase photo size
+- [x] Match font sizes from the sample
+- [x] Update "Investigative Reporter" to "Investigative Journalist"
+- [x] Ensure mobile saving works correctly
 
-### 2. Update Button Text
-- [x] Change the first button text to "Generate FREE Press Pass Now" with FREE emphasized
-- [x] Change the second button text to "Enhanced/Laminated Version $15"
+## 4. Exposure Reports Tab
+- [x] Fix non-working tab
+- [x] Implement proper loading mechanism
 
-### 3. Ensure Database Integration
-- [x] Verify the Supabase integration is working correctly
-- [x] Ensure the trackPass function is properly sending data to the backend
+## 5. Database Tracking
+- [x] Implement backend tracking solution
 
-## Implementation Plan
-1. Fix the drawPass function to update the name in real-time
-2. Update the button text as requested
-3. Test the database integration
-4. Deploy the changes
+## 6. Stripe Integration
+- [x] Set up Stripe checkout functionality
+- [x] Add Stripe API keys integration
+
+## 7. Netlify Deployment
+- [x] Create netlify.toml configuration
+- [x] Set up Netlify Functions
+- [x] Create deployment script

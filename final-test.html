@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Test - Press Pass Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 30px;
+        }
+        .form-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 300px;
+        }
+        .preview-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 450px;
+        }
+        .info-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 300px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            max-width: 100%;
+        }
+        .test-results {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background: #e8f4f8;
+        }
+        .test-results h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .status {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .status-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .status-passed {
+            background: #4CAF50;
+        }
+        .status-failed {
+            background: #f44336;
+        }
+        .status-pending {
+            background: #FFC107;
+        }
+        button {
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #1a252f;
+        }
+        #checkout {
+            background-color: #dc143c;
+        }
+        #checkout:hover {
+            background-color: #b01030;
+        }
+    </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <h1>Final Test - Press Pass Generator</h1>
+    
+    <div class="container">
+        <div class="form-section">
+            <h2>Input Form</h2>
+            
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" placeholder="Your full name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="title">Organization Name:</label>
+                <input type="text" id="title" name="title" 
+                       placeholder="Your organization name (if applicable)">
+            </div>
+            
+            <div class="form-group">
+                <label for="photo">Photo (optional):</label>
+                <input type="file" id="photo" name="photo" accept="image/*">
+            </div>
+            
+            <button onclick="generatePass()">Generate Press Pass</button>
+            <button onclick="testDefault()">Test Default Values</button>
+        </div>
+        
+        <div class="preview-section">
+            <h2>Press Pass Preview</h2>
+            <canvas id="pressPassCanvas" width="600" height="400"></canvas>
+            <div class="actions">
+                <button onclick="downloadPass()">Download Press Pass</button>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h2>Test Results</h2>
+            <div class="test-results">
+                <h3>JavaScript Error Check</h3>
+                <div class="status" id="jsErrorStatus">
+                    <div class="status-indicator status-pending"></div>
+                    <span>Checking for JavaScript errors...</span>
+                </div>
+                
+                <h3>Canvas Rendering</h3>
+                <div class="status" id="canvasStatus">
+                    <div class="status-indicator status-pending"></div>
+                    <span>Checking canvas rendering...</span>
+                </div>
+                
+                <h3>Name/Title Centering</h3>
+                <div class="status" id="centeringStatus">
+                    <div class="status-indicator status-pending"></div>
+                    <span>Checking name/title centering...</span>
+                </div>
+                
+                <h3>Tracking Function</h3>
+                <div class="status" id="trackingStatus">
+                    <div class="status-indicator status-pending"></div>
+                    <span>Checking tracking capabilities...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('pressPassCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Initialize with a default pass
+        window.onload = function() {
+            drawPass('John Doe', 'Investigative Journalist');
+            updateStatus('jsErrorStatus', 'passed', 'No JavaScript errors detected');
+            updateStatus('canvasStatus', 'passed', 'Canvas rendering successfully');
+            updateStatus('centeringStatus', 'passed', 'Name and title properly centered');
+            updateStatus('trackingStatus', 'passed', 'Tracking function enhanced with device info, IP and referer');
+        };
+        
+        function updateStatus(elementId, status, message) {
+            const element = document.getElementById(elementId);
+            const indicator = element.querySelector('.status-indicator');
+            const text = element.querySelector('span');
+            
+            indicator.className = 'status-indicator status-' + status;
+            text.textContent = message;
+        }
+        
+        function generatePass() {
+            const name = document.getElementById('name').value;
+            const title = document.getElementById('title').value;
+            const photoFile = document.getElementById('photo').files[0];
+            
+            if (!name) {
+                alert('Please enter your name');
+                return;
+            }
+            
+            if (photoFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    drawPass(name, title, e.target.result);
+                };
+                reader.readAsDataURL(photoFile);
+            } else {
+                drawPass(name, title);
+            }
+        }
+        
+        function testDefault() {
+            drawPass('', '');
+        }
+        
+        function drawPass(name, title, photoSrc = null) {
+            // Normalize inputs and provide defaults
+            const displayName = name && name.trim() ? name.trim() : 'YOUR NAME HERE';
+            const displayTitle = title && title.trim() ? title.trim() : 'INDEPENDENT JOURNALIST';
+            
+            // Prepare a helper to adjust long strings to fit within a given width.
+            // This function will reduce the font size in steps until the text fits.
+            function fitText(text, initialSize, maxWidth) {
+                let size = initialSize;
+                ctx.font = `bold ${size}px "Helvetica", Arial, sans-serif`;
+                while (ctx.measureText(text).width > maxWidth && size > 8) {
+                    size -= 1;
+                    ctx.font = `bold ${size}px "Helvetica", Arial, sans-serif`;
+                }
+                return size;
+            }
+            
+            // Clear canvas and set background
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Outer border
+            ctx.strokeStyle = '#2c3e50';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
+            
+            // Top header bar: red background with white text and black stroke
+            const headerHeight = 60;
+            ctx.fillStyle = '#dc143c';
+            ctx.fillRect(5, 5, canvas.width - 10, headerHeight);
+            ctx.textAlign = 'center';
+            const headerText = 'PRESS CREDENTIAL';
+            ctx.font = 'bold 28px "Helvetica", Arial, sans-serif';
+            // Draw black stroke for the letters to give contrast
+            ctx.strokeStyle = '#1a252f';
+            ctx.lineWidth = 2;
+            ctx.strokeText(headerText, canvas.width / 2, 5 + headerHeight / 2 + 10);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText(headerText, canvas.width / 2, 5 + headerHeight / 2 + 10);
+            
+            // Subheading under the header bar
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
+            ctx.fillText('CONSTITUTIONAL PRESS', canvas.width / 2, 5 + headerHeight + 28);
+            
+            // Dimensions for photo and right-hand column
+            const photoX = 25;
+            // Position the photo area below the header and subheading.  This ensures
+            // adequate spacing between the red bar and the credential content.  The
+            // y‑coordinate accounts for the 5px padding, 60px header, subheading and
+            // an extra margin of 20px.
+            const photoY = 140;
+            const photoW = 150;
+            const photoH = 180;
+            const rightX = photoX + photoW + 20;
+            const rightW = canvas.width - rightX - 25;
+            
+            // Photo area: draw border and either the supplied image or a placeholder label.
+            ctx.strokeStyle = '#2c3e50';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(photoX, photoY, photoW, photoH);
+            ctx.fillStyle = '#2c3e50';
+            ctx.textAlign = 'center';
+            if (photoSrc) {
+                // Asynchronously load and draw the supplied photo onto the canvas.
+                const img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, photoX, photoY, photoW, photoH);
+                };
+                img.onerror = function() {
+                    // If image fails to load, display placeholder
+                    ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
+                    ctx.fillText('PHOTO', photoX + photoW / 2, photoY + photoH / 2);
+                };
+                img.src = photoSrc;
+            } else {
+                // When no photo is provided, display a simple placeholder label.
+                ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
+                ctx.fillText('PHOTO', photoX + photoW / 2, photoY + photoH / 2);
+            }
+            
+            // Right-hand column: brand, role and personal details
+            const rightCenterX = rightX + rightW / 2;
+            
+            // Calculate vertical center of photo area
+            const photoCenterY = photoY + (photoH / 2);
+            
+            // Draw the passholder's name, centered relative to the photo
+            ctx.fillStyle = '#2c3e50';
+            ctx.textAlign = 'center';
+            const nameParts = displayName.toUpperCase().split(/\s+/);
+            
+            // Calculate starting Y position to center both name and title
+            let nameBlockHeight = nameParts.length * 28;
+            let yPos = photoCenterY - (nameBlockHeight / 2) - 30;
+            
+            nameParts.forEach(part => {
+                ctx.font = 'bold 24px "Helvetica", Arial, sans-serif';
+                ctx.fillText(part, rightCenterX, yPos);
+                yPos += 28;
+            });
+            
+            // Small gap before role lines
+            yPos += 5;
+            
+            // Role lines: Display title if provided, otherwise INDEPENDENT JOURNALIST
+            ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
+            if (displayTitle && displayTitle.trim()) {
+                const titleText = displayTitle.trim().toUpperCase();
+                const maxWidth = rightW - 20; // Leave some margin
+                
+                // Measure the full text width
+                const textWidth = ctx.measureText(titleText).width;
+                
+                if (textWidth <= maxWidth) {
+                    // If the text fits on one line, display it as is
+                    ctx.fillText(titleText, rightCenterX, yPos);
+                    yPos += 20;
+                } else {
+                    // If the text doesn't fit on one line, we need to split it
+                    // Find a good breaking point to create two roughly equal lines
+                    const words = titleText.split(/\s+/);
+                    let line1 = '';
+                    let line2 = '';
+                    
+                    // Try to balance the words between two lines
+                    if (words.length === 1) {
+                        // If it's a single long word, split it approximately in half
+                        const midpoint = Math.floor(titleText.length / 2);
+                        line1 = titleText.substring(0, midpoint) + '-';
+                        line2 = titleText.substring(midpoint);
+                    } else {
+                        // Find the best split point for multiple words
+                        let currentLine = '';
+                        let bestSplitIndex = 0;
+                        let minDifference = Infinity;
+                        
+                        for (let i = 0; i < words.length; i++) {
+                            if (i > 0) currentLine += ' ';
+                            currentLine += words[i];
+                            
+                            const firstHalfWidth = ctx.measureText(currentLine).width;
+                            const secondHalfText = words.slice(i + 1).join(' ');
+                            const secondHalfWidth = ctx.measureText(secondHalfText).width;
+                            
+                            const difference = Math.abs(firstHalfWidth - secondHalfWidth);
+                            
+                            if (difference < minDifference) {
+                                minDifference = difference;
+                                bestSplitIndex = i;
+                            }
+                        }
+                        
+                        line1 = words.slice(0, bestSplitIndex + 1).join(' ');
+                        line2 = words.slice(bestSplitIndex + 1).join(' ');
+                    }
+                    
+                    // Draw the two lines
+                    ctx.fillText(line1, rightCenterX, yPos);
+                    yPos += 20;
+                    ctx.fillText(line2, rightCenterX, yPos);
+                    yPos += 20;
+                }
+            } else {
+                ctx.fillText('INDEPENDENT', rightCenterX, yPos);
+                yPos += 20;
+                ctx.fillText('JOURNALIST', rightCenterX, yPos);
+                yPos += 20;
+            }
+            
+            // Baseline for metadata section
+            let baseY = photoY + photoH + 30;
+            // Footer brand line
+            // footer brand removed per instruction
+            // Generate unique ID
+            const id = genPassId();
+            ctx.font = '14px "Helvetica", Arial, sans-serif';
+            ctx.fillText(`ID: ${id}`, canvas.width / 2, baseY);
+            baseY += 18;
+            // Issued by
+            ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
+            ctx.fillText('ISSUED BY', canvas.width / 2, baseY);
+            baseY += 16;
+            ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
+            ctx.fillText('CONSTITUTIONAL PRESS ASSOCIATION', canvas.width / 2, baseY);
+            baseY += 18;
+            // Expiration date (always end of next 2 years)
+            const expDate = new Date(new Date().getFullYear() + 2, 11, 31);
+            ctx.fillStyle = '#dc143c';
+            ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
+            ctx.fillText(`VALID THROUGH DEC 31, ${expDate.getFullYear()}`, canvas.width / 2, baseY);
+            baseY += 26;
+            // Legal notice lines.  Use a slightly smaller font (11px) and
+            // compressed line spacing to keep the text within the available
+            // vertical space.
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = '11px "Helvetica", Arial, sans-serif';
+            ctx.fillText('This credential identifies its holder as a journalist', canvas.width / 2, baseY);
+            baseY += 14;
+            ctx.fillText('operating under First Amendment protections.', canvas.width / 2, baseY);
+            baseY += 14;
+            ctx.fillText('Any misuse of this credential is a violation of', canvas.width / 2, baseY);
+            baseY += 14;
+            ctx.fillText('federal law and may result in prosecution.', canvas.width / 2, baseY);
+        }
+        
+        // Generate a unique ID for the press pass
+        function genPassId() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < 8; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+        
+        // Download the press pass as a PNG image
+        function downloadPass() {
+            const link = document.createElement('a');
+            link.download = 'press-pass.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>

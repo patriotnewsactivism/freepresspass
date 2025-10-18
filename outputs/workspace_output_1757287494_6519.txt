@@ -1,0 +1,11 @@
+          <button id="openImage">Open Image</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="exposure-reports">
+      <h2>Exposure Reports</h2>
+      <iframe id="reportsFrame" src="https://www.youtube.com/embed?listType=playlist&list=PLplaceholder" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </main>
+  

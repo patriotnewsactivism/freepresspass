@@ -1,0 +1,6 @@
+[main 4eb867a] Enhanced SEO optimization and user experience: Added meta tags, structured data, sitemap, robots.txt, FAQ section, testimonials, legal disclaimers, contact info, image error handling, caching strategies, and JavaScript performance optimizations
+ 7 files changed, 394 insertions(+), 12 deletions(-)
+ create mode 100644 assets/press-pass-preview.jpg
+ create mode 100644 favicon.ico
+ create mode 100644 robots.txt
+ create mode 100644 sitemap.xml

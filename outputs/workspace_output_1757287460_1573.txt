@@ -1,0 +1,2 @@
+31:            <label for="photo">Add Photo:</label>
+32:            <input type="file" id="photo" name="photo" accept="image/*">

@@ -6,6 +6,9 @@ const { createClient } = require('@supabase/supabase-js');
 const supabaseUrl = process.env.SUPABASE_URL;
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+// Set the contact email address
+const contactEmail = 'press@freepresspass.com';
+
 // Validate environment variables
 if (!supabaseUrl || !serviceKey) {
   console.error('Missing required environment variables: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY');
@@ -20,7 +23,7 @@ exports.handler = async (event) => {
       statusCode: 405,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': '*', // Adjust in production
         'Access-Control-Allow-Headers': 'Content-Type'
       },
       body: JSON.stringify({ error: 'Method not allowed' })
@@ -36,7 +39,7 @@ exports.handler = async (event) => {
         statusCode: 400,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Origin': '*', // Adjust in production
           'Access-Control-Allow-Headers': 'Content-Type'
         },
         body: JSON.stringify({ error: 'Missing required fields: name, email, or pass_number' })
@@ -50,30 +53,22 @@ exports.handler = async (event) => {
         statusCode: 400,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Origin': '*', // Adjust in production
           'Access-Control-Allow-Headers': 'Content-Type'
         },
         body: JSON.stringify({ error: 'Invalid email format' })
       };
     }
 
-    // Extract device and request information
-    const userAgent = event.headers['user-agent'] || 'Unknown';
-    const ipAddress = event.headers['x-forwarded-for'] || 
-                     event.headers['x-real-ip'] || 
-                     'Unknown';
-    const referer = event.headers['referer'] || event.headers['referrer'] || null;
-    
-    // Prepare the payload with consistent field names and device tracking
+    // Prepare the payload with consistent field names
     const payload = {
       name: data.name,
       title: data.title || null,
       email: data.email,
       pass_number: data.pass_number,
-      user_agent: userAgent,
-      ip_address: ipAddress,
-      referer: referer,
-      created_at: new Date().toISOString()
+      download_type: data.download_type || 'download', // Track the type of download
+      created_at: new Date().toISOString(),
+      contact_email: contactEmail // Add the contact email
     };
 
     // Insert the record into Supabase
@@ -88,7 +83,7 @@ exports.handler = async (event) => {
         statusCode: 500,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Origin': '*', // Adjust in production
           'Access-Control-Allow-Headers': 'Content-Type'
         },
         body: JSON.stringify({ 
@@ -104,7 +99,7 @@ exports.handler = async (event) => {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': '*', // Adjust in production
         'Access-Control-Allow-Headers': 'Content-Type'
       },
       body: JSON.stringify({
@@ -119,7 +114,7 @@ exports.handler = async (event) => {
       statusCode: 500,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': '*', // Adjust in production
         'Access-Control-Allow-Headers': 'Content-Type'
       },
       body: JSON.stringify({ 
