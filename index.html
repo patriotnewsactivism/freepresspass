@@ -506,7 +506,13 @@
       // space for the header bar and subheading.  Each subsequent line is
       // offset by a consistent spacing to keep the content within the
       // constrained height.
-      let yPos = photoY + 25;
+      // Calculate vertical centering for name and title
+        const photoCenterY = photoY + (photoH / 2);
+        const nameParts = displayName.toUpperCase().split(/\s+/);
+        // Calculate total height needed for name and title blocks
+        let nameBlockHeight = nameParts.length * 28;
+        // Position name/title block to be centered vertically on photo
+        let yPos = photoCenterY - (nameBlockHeight / 2) + 10;
       // Draw the passholder's name, split into stacked lines.
       ctx.fillStyle = '#2c3e50';
       ctx.textAlign = 'center';
