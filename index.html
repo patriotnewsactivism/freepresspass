@@ -384,7 +384,10 @@
             
             // Calculate starting Y position to center both name and title
             let nameBlockHeight = nameParts.length * 28;
-            let yPos = photoCenterY - (nameBlockHeight / 2) - 30;
+            // Also account for title height (approximately 2 lines of 20px each)
+               let titleBlockHeight = 40;
+               let totalBlockHeight = nameBlockHeight + 5 + titleBlockHeight; // 5px gap between name and title
+               let yPos = photoCenterY - (totalBlockHeight / 2);
             
             nameParts.forEach(part => {
                 ctx.font = 'bold 24px "Helvetica", Arial, sans-serif';
