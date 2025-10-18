@@ -8,9 +8,14 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "http-server": "^14.1.1",
     "stripe": "^14.4.0"
   },
-  "keywords": ["press-pass", "journalism", "first-amendment"],
+  "keywords": [
+    "press-pass",
+    "journalism",
+    "first-amendment"
+  ],
   "author": "Constitutional Press Association",
   "license": "MIT"
 }

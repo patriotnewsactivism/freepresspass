@@ -296,50 +296,18 @@
     // Canvas rendering
     const canvas = document.getElementById('passCanvas');
     const ctx = canvas.getContext('2d');
+    let currentPhotoSrc = null;
     
     // Generate a random pass ID
     function genPassId() {
       return 'pass-' + Math.random().toString(36).substring(2, 10).toUpperCase();
     }
     
-    // Get brand name
-    function brandName() {
-      return 'CONSTITUTIONAL PRESS ASSOCIATION';
-    }
-    
-    // Debounce function for performance optimization
-    function debounce(func, wait) {
-      let timeout;
-      return function executedFunction(...args) {
-        const later = () => {
-          clearTimeout(timeout);
-          func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-      };
-    }
-    
-    // Draw the press credential on canvas.  The layout of this pass is modeled
-    // after a traditional laminated credential with a large photo on the left,
-    // a bold vertical brand on the right and important metadata below.  Text
-    // measurements are adjusted to avoid overruns beyond the canvas margins.
+    // Draw the press credential on canvas
     function drawPass(name, title, photoSrc = null) {
       // Normalize inputs and provide defaults
       const displayName = name && name.trim() ? name.trim() : 'YOUR NAME HERE';
       const displayTitle = title && title.trim() ? title.trim() : 'INDEPENDENT JOURNALIST';
-
-      // Prepare a helper to adjust long strings to fit within a given width.
-      // This function will reduce the font size in steps until the text fits.
-      function fitText(text, initialSize, maxWidth) {
-        let size = initialSize;
-        ctx.font = `bold ${size}px "Helvetica", Arial, sans-serif`;
-        while (ctx.measureText(text).width > maxWidth && size > 8) {
-          size -= 1;
-          ctx.font = `bold ${size}px "Helvetica", Arial, sans-serif`;
-        }
-        return size;
-      }
 
       // Clear canvas and set background
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -372,24 +340,21 @@
 
       // Dimensions for photo and right-hand column
       const photoX = 25;
-      // Position the photo area below the header and subheading.  This ensures
-      // adequate spacing between the red bar and the credential content.  The
-      // y‑coordinate accounts for the 5px padding, 60px header, subheading and
-      // an extra margin of 20px.
       const photoY = 140;
       const photoW = 150;
       const photoH = 180;
       const rightX = photoX + photoW + 20;
       const rightW = canvas.width - rightX - 25;
 
-      // Photo area: draw border and either the supplied image or a placeholder label.
+      // Photo area: draw border and either the supplied image or a placeholder label
       ctx.strokeStyle = '#2c3e50';
       ctx.lineWidth = 2;
       ctx.strokeRect(photoX, photoY, photoW, photoH);
       ctx.fillStyle = '#2c3e50';
       ctx.textAlign = 'center';
+      
       if (photoSrc) {
-        // Asynchronously load and draw the supplied photo onto the canvas.
+        // Asynchronously load and draw the supplied photo onto the canvas
         const img = new Image();
         img.onload = function() {
           ctx.drawImage(img, photoX, photoY, photoW, photoH);
@@ -399,26 +364,27 @@
           ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
           ctx.fillText('PHOTO', photoX + photoW / 2, photoY + photoH / 2);
         };
+        img.src = photoSrc;
+      } else {
+        // When no photo is provided, display a simple placeholder label
+        ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
+        ctx.fillText('PHOTO', photoX + photoW / 2, photoY + photoH / 2);
+      }
 
       // Right-hand column: brand, role and personal details
       const rightCenterX = rightX + rightW / 2;
-      // Begin drawing text in the right-hand column.  The vertical starting
-      // position is calculated relative to the top of the photo area, allowing
-      // space for the header bar and subheading.  Each subsequent line is
-      // offset by a consistent spacing to keep the content within the
-      // constrained height.
-         // Calculate vertical center of photo for proper centering
-           const photoCenterY = photoY + (photoH / 2);
-           const nameParts = displayName.toUpperCase().split(/\\s+/);
-           
-           // Calculate total height of name and title blocks
-           const nameHeight = nameParts.length * 28;
-           const titleHeight = 40; // Approximate height for title (2 lines)
-           const totalHeight = nameHeight + 5 + titleHeight; // 5px gap
-           
-           // Start position to center the entire name/title block on photo
-           let yPos = photoCenterY - (totalHeight / 2);
-      // Draw the passholder's name, split into stacked lines.
+      const photoCenterY = photoY + (photoH / 2);
+      const nameParts = displayName.toUpperCase().split(/\s+/);
+      
+      // Calculate total height of name and title blocks
+      const nameHeight = nameParts.length * 28;
+      const titleHeight = 40;
+      const totalHeight = nameHeight + 5 + titleHeight;
+      
+      // Start position to center the entire name/title block on photo
+      let yPos = photoCenterY - (totalHeight / 2);
+      
+      // Draw the passholder's name, split into stacked lines
       ctx.fillStyle = '#2c3e50';
       ctx.textAlign = 'center';
       nameParts.forEach(part => {
@@ -426,33 +392,34 @@
         ctx.fillText(part, rightCenterX, yPos);
         yPos += 28;
       });
+      
       // Small gap before role lines
       yPos += 5;
+      
       // Role lines: Display title if provided, otherwise INDEPENDENT JOURNALIST
       ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
-      if (title && title.trim()) {
-        const titleLines = title.trim().toUpperCase().split(/\s+/);
-        titleLines.forEach((line, index) => {
-          ctx.fillText(line, rightCenterX, yPos + index * 20);
+      if (displayTitle && displayTitle.toUpperCase() !== 'INDEPENDENT JOURNALIST') {
+        const titleLines = displayTitle.toUpperCase().split(/\s+/);
+        titleLines.forEach((line) => {
+          ctx.fillText(line, rightCenterX, yPos);
+          yPos += 20;
         });
-        yPos += titleLines.length * 20;
       } else {
         ctx.fillText('INDEPENDENT', rightCenterX, yPos);
         yPos += 20;
         ctx.fillText('JOURNALIST', rightCenterX, yPos);
         yPos += 20;
       }
-      // No need to display the title again as we've already displayed it above
 
       // Baseline for metadata section
       let baseY = photoY + photoH + 30;
-      // Footer brand line
-      // footer brand removed per instruction
+      
       // Generate unique ID
       const id = genPassId();
       ctx.font = '14px "Helvetica", Arial, sans-serif';
       ctx.fillText(`ID: ${id}`, canvas.width / 2, baseY);
       baseY += 18;
+      
       // Issued by
       ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
       ctx.fillText('ISSUED BY', canvas.width / 2, baseY);
@@ -460,15 +427,15 @@
       ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
       ctx.fillText('CONSTITUTIONAL PRESS ASSOCIATION', canvas.width / 2, baseY);
       baseY += 18;
+      
       // Expiration date (always end of next 2 years)
       const expDate = new Date(new Date().getFullYear() + 2, 11, 31);
       ctx.fillStyle = '#dc143c';
       ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
       ctx.fillText(`VALID THROUGH DEC 31, ${expDate.getFullYear()}`, canvas.width / 2, baseY);
       baseY += 26;
-      // Legal notice lines.  Use a slightly smaller font (11px) and
-      // compressed line spacing to keep the text within the available
-      // vertical space.
+      
+      // Legal notice lines
       ctx.fillStyle = '#1a252f';
       ctx.font = 'bold 11px "Helvetica", Arial, sans-serif';
       const legalLines = [
@@ -480,8 +447,8 @@
         ctx.fillText(t, canvas.width / 2, baseY + i * 14);
       });
       baseY += legalLines.length * 14 + 16;
-      // Additional notes.  Use an even smaller font (10px) and
-      // compressed spacing.
+      
+      // Additional notes
       ctx.fillStyle = '#2c3e50';
       ctx.font = 'bold 10px "Helvetica", Arial, sans-serif';
       const noteLines = [
@@ -491,16 +458,29 @@
       noteLines.forEach((t, i) => {
         ctx.fillText(t, canvas.width / 2, baseY + i * 14);
       });
-
-        document.getElementById('title').addEventListener('input', function(e) {
-            const name = document.getElementById('name').value;
-            const title = e.target.value;
-            drawPass(name, title, currentPhotoSrc);
-        });
-        
+    }
+    
+    // Photo upload handler
+    document.getElementById('photo').addEventListener('change', function() {
+      const preview = document.getElementById('photo-preview');
+      const previewImage = document.getElementById('preview-image');
+      
+      if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          currentPhotoSrc = e.target.result;
+          previewImage.src = currentPhotoSrc;
+          preview.style.display = 'block';
+          
+          // Redraw the pass with the new photo
+          const name = document.getElementById('name').value;
+          const title = document.getElementById('title').value;
+          drawPass(name, title, currentPhotoSrc);
+        };
         reader.readAsDataURL(this.files[0]);
       } else {
         preview.style.display = 'none';
+        currentPhotoSrc = null;
       }
     });
     
@@ -518,263 +498,20 @@
       window.open(dataUrl, '_blank');
     });
     
-    // Checkout functionality
-    document.getElementById('checkout').addEventListener('click', async () => {
-      // Validate form before proceeding
-      if (!validateForm()) {
-        return;
-      }
-      
-      const checkoutButton = document.getElementById('checkout');
-      const originalText = checkoutButton.innerHTML;
-      
-      // Show loading indicator with spinner
-      checkoutButton.innerHTML = '<span class="spinner"></span> Processing...';
-      checkoutButton.disabled = true;
-      
-      const name = (document.getElementById('name').value || '').trim();
-      const title = (document.getElementById('title').value || '').trim();
-      const email = (document.getElementById('email').value || '').trim();
-      const id = 'pass-' + (Date.now().toString(36).toUpperCase());
-      
-      try {
-        const res = await fetch('/.netlify/functions/create-checkout-session', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ 
-            quantity: 1, 
-            passId: id, 
-            name,
-            title,
-            email
-          })
-        });
-        
-        function isValidEmail(email) {
-            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            return emailRegex.test(email);
-        }
-        
-        function drawPass(name, title, photoSrc = null) {
-            // Normalize inputs and provide defaults
-            const displayName = name && name.trim() ? name.trim() : 'YOUR NAME HERE';
-            const displayTitle = title && title.trim() ? title.trim() : 'INDEPENDENT JOURNALIST';
-            
-            // Prepare a helper to adjust long strings to fit within a given width.
-            // This function will reduce the font size in steps until the text fits.
-            function fitText(text, initialSize, maxWidth) {
-                let size = initialSize;
-                ctx.font = `bold ${size}px "Helvetica", Arial, sans-serif`;
-                while (ctx.measureText(text).width > maxWidth && size > 8) {
-                    size -= 1;
-                    ctx.font = `bold ${size}px "Helvetica", Arial, sans-serif`;
-                }
-                return size;
-            }
-            
-            // Clear canvas and set background
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Outer border
-            ctx.strokeStyle = '#2c3e50';
-            ctx.lineWidth = 3;
-            ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
-            
-            // Top header bar: red background with white text and black stroke
-            const headerHeight = 60;
-            ctx.fillStyle = '#dc143c';
-            ctx.fillRect(5, 5, canvas.width - 10, headerHeight);
-            ctx.textAlign = 'center';
-            const headerText = 'PRESS CREDENTIAL';
-            ctx.font = 'bold 28px "Helvetica", Arial, sans-serif';
-            // Draw black stroke for the letters to give contrast
-            ctx.strokeStyle = '#1a252f';
-            ctx.lineWidth = 2;
-            ctx.strokeText(headerText, canvas.width / 2, 5 + headerHeight / 2 + 10);
-            ctx.fillStyle = '#ffffff';
-            ctx.fillText(headerText, canvas.width / 2, 5 + headerHeight / 2 + 10);
-            
-            // Subheading under the header bar
-            ctx.fillStyle = '#2c3e50';
-            ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
-            ctx.fillText('CONSTITUTIONAL PRESS', canvas.width / 2, 5 + headerHeight + 28);
-            
-            // Dimensions for photo and right-hand column
-            const photoX = 25;
-            const photoY = 140;
-            const photoW = 150;
-            const photoH = 180;
-            const rightX = photoX + photoW + 20;
-            const rightW = canvas.width - rightX - 25;
-            
-            // Photo area: draw border and either the supplied image or a placeholder label.
-            ctx.strokeStyle = '#2c3e50';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(photoX, photoY, photoW, photoH);
-            ctx.fillStyle = '#2c3e50';
-            ctx.textAlign = 'center';
-            if (photoSrc) {
-                // Asynchronously load and draw the supplied photo onto the canvas.
-                const img = new Image();
-                img.onload = function() {
-                    ctx.drawImage(img, photoX, photoY, photoW, photoH);
-                };
-                img.onerror = function() {
-                    // If image fails to load, display placeholder
-                    ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
-                    ctx.fillText('PHOTO', photoX + photoW / 2, photoY + photoH / 2);
-                };
-                img.src = photoSrc;
-            } else {
-                // When no photo is provided, display a simple placeholder label.
-                ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
-                ctx.fillText('PHOTO', photoX + photoW / 2, photoY + photoH / 2);
-            }
-            
-            // Right-hand column: brand, role and personal details
-            const rightCenterX = rightX + rightW / 2;
-            
-            // Calculate vertical center of photo area
-            const photoCenterY = photoY + (photoH / 2);
-            
-            // Draw the passholder's name, centered relative to the photo
-            ctx.fillStyle = '#2c3e50';
-            ctx.textAlign = 'center';
-            const nameParts = displayName.toUpperCase().split(/\s+/);
-            
-            // Calculate starting Y position to center both name and title
-            let nameBlockHeight = nameParts.length * 28;
-            // Also account for title height (approximately 2 lines of 20px each)
-            let titleBlockHeight = 40;
-            let totalBlockHeight = nameBlockHeight + 5 + titleBlockHeight; // 5px gap between name and title
-            let yPos = photoCenterY - (totalBlockHeight / 2);
-            
-            nameParts.forEach(part => {
-                ctx.font = 'bold 24px "Helvetica", Arial, sans-serif';
-                ctx.fillText(part, rightCenterX, yPos);
-                yPos += 28;
-            });
-            
-            // Small gap before role lines
-            yPos += 5;
-            
-            // Role lines: Display title if provided, otherwise INDEPENDENT JOURNALIST
-            ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
-            if (displayTitle && displayTitle.trim() && displayTitle.toUpperCase() !== 'INDEPENDENT JOURNALIST') {
-                const titleText = displayTitle.trim().toUpperCase();
-                const maxWidth = rightW - 20; // Leave some margin
-                
-                // Measure the full text width
-                const textWidth = ctx.measureText(titleText).width;
-                
-                if (textWidth <= maxWidth) {
-                    // If the text fits on one line, display it as is
-                    ctx.fillText(titleText, rightCenterX, yPos);
-                    yPos += 20;
-                } else {
-                    // If the text doesn't fit on one line, we need to split it
-                    const words = titleText.split(/\s+/);
-                    let line1 = '';
-                    let line2 = '';
-                    
-                    if (words.length === 1) {
-                        const midpoint = Math.floor(titleText.length / 2);
-                        line1 = titleText.substring(0, midpoint) + '-';
-                        line2 = titleText.substring(midpoint);
-                    } else {
-                        let currentLine = '';
-                        let bestSplitIndex = 0;
-                        let minDifference = Infinity;
-                        
-                        for (let i = 0; i < words.length; i++) {
-                            if (i > 0) currentLine += ' ';
-                            currentLine += words[i];
-                            
-                            const firstHalfWidth = ctx.measureText(currentLine).width;
-                            const secondHalfText = words.slice(i + 1).join(' ');
-                            const secondHalfWidth = ctx.measureText(secondHalfText).width;
-                            
-                            const difference = Math.abs(firstHalfWidth - secondHalfWidth);
-                            
-                            if (difference < minDifference) {
-                                minDifference = difference;
-                                bestSplitIndex = i;
-                            }
-                        }
-                        
-                        line1 = words.slice(0, bestSplitIndex + 1).join(' ');
-                        line2 = words.slice(bestSplitIndex + 1).join(' ');
-                    }
-                    
-                    // Draw the two lines
-                    ctx.fillText(line1, rightCenterX, yPos);
-                    yPos += 20;
-                    if (line2) { // Only draw line 2 if it exists
-                        ctx.fillText(line2, rightCenterX, yPos);
-                        yPos += 20;
-                    }
-                }
-            } else {
-                ctx.fillText('INDEPENDENT', rightCenterX, yPos);
-                yPos += 20;
-                ctx.fillText('JOURNALIST', rightCenterX, yPos);
-                yPos += 20;
-            }
-            
-            // Baseline for metadata section
-            let baseY = photoY + photoH + 30;
-            
-            // Generate unique ID
-            const id = genPassId();
-            ctx.font = '14px "Helvetica", Arial, sans-serif';
-            ctx.fillText(`ID: ${id}`, canvas.width / 2, baseY);
-            baseY += 18;
-            
-            // Issued by
-            ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
-            ctx.fillText('ISSUED BY', canvas.width / 2, baseY);
-            baseY += 16;
-            ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
-            ctx.fillText('CONSTITUTIONAL PRESS ASSOCIATION', canvas.width / 2, baseY);
-            baseY += 18;
-            
-            // Expiration date (always end of next 2 years)
-            const expDate = new Date(new Date().getFullYear() + 2, 11, 31);
-            ctx.fillStyle = '#dc143c';
-            ctx.font = 'bold 14px "Helvetica", Arial, sans-serif';
-            ctx.fillText(`VALID THROUGH DEC 31, ${expDate.getFullYear()}`, canvas.width / 2, baseY);
-        }
-      } catch (e) {
-        console.error('Checkout error:', e);
-        showNotification('Checkout failed: ' + e.message, 'error');
-      } finally {
-        // Reset button
-        checkoutButton.innerHTML = originalText;
-        checkoutButton.disabled = false;
-      }
-    });
-    
-    // Form validation function
-    // Form validation function is defined below
-    
     // Initialize with a sample pass
     drawPass('YOUR NAME HERE', 'Investigative Journalist');
 
-    // Add real-time updates for name, title, and organization fields
+    // Add real-time updates for name and title fields
     document.getElementById('name').addEventListener('input', function() {
       const nameValue = this.value.trim();
       const titleValue = document.getElementById('title').value.trim();
-      drawPass(nameValue || 'YOUR NAME HERE', titleValue);
+      drawPass(nameValue || 'YOUR NAME HERE', titleValue, currentPhotoSrc);
     });
 
     document.getElementById('title').addEventListener('input', function() {
       const nameValue = document.getElementById('name').value.trim();
       const titleValue = this.value.trim();
-      drawPass(nameValue || 'YOUR NAME HERE', titleValue);
+      drawPass(nameValue || 'YOUR NAME HERE', titleValue, currentPhotoSrc);
     });
   </script>
 
@@ -926,167 +663,13 @@
           console.error('Error tracking press pass:', err);
         });
       }
-                  email: emailInput,
-                  pass_number: passNumber,
-                  organization: 'Full Court Press' // Adding organization field
-                });
-                showNotification('Press pass generated and saved successfully!');
-              } else {
-                // Use local database if API is not available
-                await db.addPass({
-                  name: nameInput,
-                  title: titleInput,
-                  email: emailInput,
-                  pass_number: passNumber,
-                  organization: 'Full Court Press'
-                });
-                showNotification('Press pass generated and saved locally. You can sync it later when online.');
-              }
-            } catch (err) {
-              console.error('Error processing press pass:', err);
-              showNotification('Error saving press pass: ' + err.message, 'error');
-            } finally {
-              // Reset button state
-              generateButton.innerHTML = originalText;
-              generateButton.disabled = false;
-            }
-            return result;
-        }
-        
-        function downloadPass(downloadType = 'download') {
-            // Validate that a pass has been generated
-            if (!canvas) {
-                showNotification('Please generate a press pass first', 'error');
-                return;
-            }
-            
-            // Get form data for tracking
-            const name = document.getElementById('name').value;
-            const title = document.getElementById('title').value;
-            const email = document.getElementById('email').value;
-            
-            if (!name || !email) {
-                showNotification('Please fill in your name and email first', 'error');
-                return;
-            }
-            
-            // Generate a pass number for tracking
-            const passNumber = Math.floor(Math.random() * 1000000);
-            
-            // Track the pass generation
-            fetch('/api/track-pass', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    name: name,
-                    title: title,
-                    email: email,
-                    pass_number: `CPP-${passNumber}`,
-                    user_agent: navigator.userAgent,
-                    timestamp: new Date().toISOString()
-                }),
-            }).catch(error => {
-                console.error('Tracking error (non-critical):', error);
-            });
-            
-            if (downloadType === 'print') {
-                // For print, we create a new window with just the image
-                const printWindow = window.open('', '_blank');
-                printWindow.document.write(`
-                    <html>
-                        <head>
-                            <title>Print Press Pass</title>
-                            <style>
-                                body { margin: 0; padding: 20px; text-align: center; font-family: Arial, sans-serif; }
-                                img { max-width: 100%; height: auto; }
-                                .instructions { margin-top: 20px; font-size: 14px; }
-                            </style>
-                        </head>
-                        <body>
-                            <img src="${canvas.toDataURL('image/png')}" alt="Press Pass" />
-                            <div class="instructions">
-                                <p>Press <strong>Ctrl+P</strong> (or <strong>Cmd+P</strong> on Mac) to print this press pass.</p>
-                                <p>For best results, print on cardstock and laminate for durability.</p>
-                            </div>
-                        </body>
-                    </html>
-                `);
-                printWindow.document.close();
-                printWindow.focus();
-                return;
-            }
-            
-            // Download the pass
-            const link = document.createElement('a');
-            link.download = `press-pass-${passNumber}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-            
-            showNotification('Press pass downloaded successfully!', 'success');
-        }
-        
-        function saveToCameraRoll() {
-            // Validate that a pass has been generated
-            if (!canvas) {
-                showNotification('Please generate a press pass first', 'error');
-                return;
-            }
-            
-            // Get form data for tracking
-            const name = document.getElementById('name').value;
-            const title = document.getElementById('title').value;
-            const email = document.getElementById('email').value;
-            
-            if (!name || !email) {
-                showNotification('Please fill in your name and email first', 'error');
-                return;
-            }
-            
-            // Generate a pass number for tracking
-            const passNumber = Math.floor(Math.random() * 1000000);
-            
-            // Track the pass generation
-            fetch('/api/track-pass', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    name: name,
-                    title: title,
-                    email: email,
-                    pass_number: `CPP-${passNumber}`,
-                    user_agent: navigator.userAgent,
-                    timestamp: new Date().toISOString()
-                }),
-            }).catch(error => {
-                console.error('Tracking error (non-critical):', error);
-            });
-            
-            // Try to save to camera roll
-            try {
-                // For iOS Safari, we can use the download attribute
-                const link = document.createElement('a');
-                link.download = `press-pass-${passNumber}.png`;
-                link.href = canvas.toDataURL('image/png');
-                
-                // Create a temporary container
-                const container = document.createElement('div');
-                container.appendChild(link);
-                
-                // Add to document, click, and remove
-                document.body.appendChild(container);
-                link.click();
-                document.body.removeChild(container);
-                
-                showNotification('Press pass image ready! Long press and save to camera roll.', 'success');
-            } catch (error) {
-                showNotification('Error saving to camera roll. Please try downloading instead.', 'error');
-            }
-        }
-      }
+      
+      // Show success notification
+      showNotification('Press pass generated successfully!');
+      
+      // Reset button state
+      generateButton.innerHTML = originalText;
+      generateButton.disabled = false;
     });
     
     // Add CSS for spinner
