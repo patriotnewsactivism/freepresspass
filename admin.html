@@ -5,37 +5,208 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard | Free Press Pass</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: #2c3e50;
+      color: white;
+    }
+    
+    .logout-button {
+      background: #dc143c;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .logout-button:hover {
+      background: #b01030;
+    }
+    
+    .admin-container {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .stat-card h3 {
+      margin: 0 0 0.5rem 0;
+      color: #2c3e50;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+    }
+    
+    .stat-card .stat-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #dc143c;
+    }
+    
+    .controls {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .controls input,
+    .controls select {
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    
+    .controls button {
+      padding: 0.5rem 1rem;
+      background: #2c3e50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .controls button:hover {
+      background: #1a252f;
+    }
+    
+    .passes-table {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      overflow-x: auto;
+    }
+    
+    .pass-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .pass-table th,
+    .pass-table td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .pass-table th {
+      background: #f4f4f4;
+      font-weight: bold;
+      color: #2c3e50;
+      cursor: pointer;
+      user-select: none;
+    }
+    
+    .pass-table th:hover {
+      background: #e8e8e8;
+    }
+    
+    .pass-table tr:hover {
+      background: #f9f9f9;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+    }
+    
+    .error {
+      background: #f44336;
+      color: white;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+  </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
 </head>
 <body>
-  <header>
+  <div class="admin-header">
     <h1>Admin Dashboard</h1>
     <button id="logout" class="logout-button">Logout</button>
-  </header>
+  </div>
 
-  <main>
+  <div class="admin-container">
     <section class="stats">
-      <h2>Statistics</h2>
-      <p id="totalPasses">Total Passes: 0</p>
-      <p id="monthlyPasses">Passes This Month: 0</p>
-      <p id="uniqueEmails">Unique Email Domains: 0</p>
+      <div class="stat-card">
+        <h3>Total Passes</h3>
+        <div class="stat-value" id="totalPasses">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Passes This Month</h3>
+        <div class="stat-value" id="monthlyPasses">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Unique Email Domains</h3>
+        <div class="stat-value" id="uniqueEmails">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Today's Passes</h3>
+        <div class="stat-value" id="todayPasses">0</div>
+      </div>
     </section>
+
+    <div class="controls">
+      <input type="text" id="searchInput" placeholder="Search by name, email, or pass number...">
+      <select id="dateFilter">
+        <option value="all">All Time</option>
+        <option value="today">Today</option>
+        <option value="week">This Week</option>
+        <option value="month">This Month</option>
+        <option value="year">This Year</option>
+      </select>
+      <button id="exportCSV">Export to CSV</button>
+      <button id="refreshData">Refresh Data</button>
+    </div>
 
     <section class="passes-table">
       <h2>Issued Press Passes</h2>
-      <table id="passesTable" class="pass-table">
+      <div id="loadingMessage" class="loading">Loading passes...</div>
+      <div id="errorMessage" class="error" style="display: none;"></div>
+      <table id="passesTable" class="pass-table" style="display: none;">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Title</th>
-            <th>Pass Number</th>
-            <th>Date Issued</th>
+            <th data-sort="name">Name ↕</th>
+            <th data-sort="email">Email ↕</th>
+            <th data-sort="title">Title ↕</th>
+            <th data-sort="pass_number">Pass Number ↕</th>
+            <th data-sort="created_at">Date Issued ↕</th>
+            <th data-sort="ip_address">IP Address ↕</th>
+            <th data-sort="user_agent">Device ↕</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
     </section>
-  </main>
+  </div>
 
   <script type="module" src="admin.js"></script>
 </body>
