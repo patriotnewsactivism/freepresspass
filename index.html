@@ -407,7 +407,8 @@
       // space for the header bar and subheading.  Each subsequent line is
       // offset by a consistent spacing to keep the content within the
       // constrained height.
-      let yPos = photoY + 25;
+      // Move name down slightly for better vertical centering on headshot
+        let yPos = photoY + 30;
       // Draw the passholder's name, split into stacked lines.
       ctx.fillStyle = '#2c3e50';
       ctx.textAlign = 'center';
