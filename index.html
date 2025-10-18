@@ -1,216 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Generate your free digital press pass for journalism activities. Get recognized under First Amendment protections with our Constitutional Press accreditation.">
-    <meta name="keywords" content="press pass, journalist credentials, media accreditation, first amendment, freedom of press, constitutional press, investigative journalist">
-    <meta name="author" content="Constitutional Press Association">
-    
-    <!-- Open Graph / Social Media Meta Tags -->
-    <meta property="og:title" content="Free Press Pass Generator">
-    <meta property="og:description" content="Generate your free digital press pass for journalism activities. Get recognized under First Amendment protections.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://freepresspass.com">
-    <meta property="og:image" content="/assets/press-pass-preview.jpg">
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Free Press Pass Generator">
-    <meta name="twitter:description" content="Generate your free digital press pass for journalism activities. Get recognized under First Amendment protections.">
-    <meta name="twitter:image" content="/assets/press-pass-preview.jpg">
-    
-    <title>Free Press Pass Generator | First Amendment Journalist Credentials</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Error message styling */
-        .error-message {
-            color: #f44336;
-            font-size: 0.8rem;
-            margin-top: 5px;
-            min-height: 1.2em;
-        }
-        
-        /* Form validation styling */
-        input:invalid {
-            border-color: #f44336;
-        }
-        
-        /* Notification system styling */
-        #notification {
-            display: none;
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 5px;
-            color: white;
-            font-weight: bold;
-            z-index: 1000;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        
-        .notification.success {
-            background-color: #4CAF50;
-        }
-        
-        .notification.error {
-            background-color: #f44336;
-        }
-        
-        /* Loading spinner */
-        .spinner {
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid #dc143c;
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Responsive adjustments for mobile */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .form-section {
-                flex-direction: column;
-            }
-            
-            .preview-section {
-                margin-top: 2rem;
-            }
-            
-            #pressPassCanvas {
-                max-width: 100%;
-                height: auto;
-            }
-        }
-        
-        /* Print-specific styles */
-        @media print {
-            body {
-                font-size: 12pt;
-            }
-            
-            .no-print {
-                display: none !important;
-            }
-            
-            #pressPassCanvas {
-                border: none;
-                width: 100%;
-                max-width: none;
-            }
-            
-            body {
-                margin: 0;
-                padding: 0;
-            }
-        }
-    </style>
-<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
-</head>
-<body>
-    <header>
-        <div class="container">
-            <h1>Free Press Pass Generator</h1>
-            <p class="tagline">Get your digital press credentials under First Amendment protections</p>
-        </div>
-    </header>
-    
-    <main class="container">
-        <section id="generator">
-            <div class="content-wrapper">
-                <div class="form-section">
-                    <h2>Create Your Press Pass</h2>
-                    <form id="pressPassForm">
-                        <div class="form-group">
-                            <label for="name">Full Name *</label>
-                            <input type="text" id="name" name="name" required>
-                            <div id="name-error" class="error-message"></div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="title">Title/Organization</label>
-                            <input type="text" id="title" name="title">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" required>
-                            <div id="email-error" class="error-message"></div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="photo">Photo (Optional)</label>
-                            <input type="file" id="photo" name="photo" accept="image/*">
-                        </div>
-                        
-                        <button type="submit" id="generateBtn">
-                            <span id="generateSpinner" class="spinner" style="display: none;"></span>
-                            Generate Press Pass
-                        </button>
-                    </form>
-                </div>
-                
-                <div class="preview-section">
-                    <h2>Press Pass Preview</h2>
-                    <!-- Changed canvas dimensions to vertical orientation (400x600) -->
-                    <canvas id="pressPassCanvas" width="400" height="600"></canvas>
-                    <div class="actions">
-                        <button id="downloadBtn" onclick="downloadPass('download')">Download Press Pass</button>
-                        <button id="printBtn" onclick="downloadPass('print')">Print Press Pass</button>
-                        <button id="saveToCamera" onclick="saveToCameraRoll()">Save to Camera Roll</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <section id="faq">
-            <h2>Frequently Asked Questions</h2>
-            <div class="faq-item">
-                <h3>Is this press pass legally valid?</h3>
-                <p>This press pass identifies you as a journalist under First Amendment protections. While it's not a government-issued credential, it can help establish your status as a member of the press in many situations.</p>
-            </div>
-            
-            <div class="faq-item">
-                <h3>Do I need to be a professional journalist to get a pass?</h3>
-                <p>No. Anyone engaged in journalism activities, including citizen journalists, bloggers, and student reporters, can generate a press pass.</p>
-            </div>
-            
-            <div class="faq-item">
-                <h3>How do I use this press pass?</h3>
-                <p>You can download and print your press pass, or save it to your mobile device. Show it when attending press conferences, public events, or when identification as press is needed.</p>
-            </div>
-            
-            <div class="faq-item">
-                <h3>Can I get a laminated physical pass?</h3>
-                <p>Yes! We offer a premium laminated press pass with holographic security features. Click below to purchase:</p>
-                <button id="checkout" onclick="checkout()" class="no-print">Get Laminated Pass - $19.99</button>
-            </div>
-        </section>
-    </main>
-    
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Constitutional Press Association. All press passes are issued under First Amendment protections.</p>
-            <p class="disclaimer">This digital press pass generator is for informational purposes only. It does not confer any special legal status beyond identifying you as a journalist.</p>
-        </div>
-    </footer>
-
-    <div id="notification"></div>
-
-    <script>
+<script>
         const canvas = document.getElementById('pressPassCanvas');
         const ctx = canvas.getContext('2d');
         let currentPhotoSrc = null;
@@ -219,6 +7,34 @@
         window.onload = function() {
             drawPass('John Doe', 'Investigative Journalist');
         };
+
+        //
+        // --- THIS IS THE FIX ---
+        // Add real-time update listeners for Name and Title fields
+        //
+        document.getElementById('name').addEventListener('input', function(e) {
+            const name = e.target.value;
+            const title = document.getElementById('title').value;
+            const photoFile = document.getElementById('photo').files[0];
+            
+            if (photoFile && !currentPhotoSrc) {
+                // If photo is selected but not drawn, load it
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentPhotoSrc = e.target.result;
+                    drawPass(name, title, currentPhotoSrc);
+                };
+                reader.readAsDataURL(photoFile);
+            } else {
+                drawPass(name, title, currentPhotoSrc);
+            }
+        });
+
+        document.getElementById('title').addEventListener('input', function(e) {
+            const name = document.getElementById('name').value;
+            const title = e.target.value;
+            drawPass(name, title, currentPhotoSrc);
+        });
         
         // Form submission handler
         document.getElementById('pressPassForm').addEventListener('submit', function(e) {
@@ -266,6 +82,7 @@
                 };
                 reader.readAsDataURL(photoFile);
             } else {
+                currentPhotoSrc = null; // Clear photo if none is selected
                 drawPass(name, title);
                 // Hide loading spinner
                 document.getElementById('generateSpinner').style.display = 'none';
@@ -326,10 +143,6 @@
             
             // Dimensions for photo and right-hand column
             const photoX = 25;
-            // Position the photo area below the header and subheading.  This ensures
-            // adequate spacing between the red bar and the credential content.  The
-            // y-coordinate accounts for the 5px padding, 60px header, subheading and
-            // an extra margin of 20px.
             const photoY = 140;
             const photoW = 150;
             const photoH = 180;
@@ -389,7 +202,7 @@
             
             // Role lines: Display title if provided, otherwise INDEPENDENT JOURNALIST
             ctx.font = 'bold 12px "Helvetica", Arial, sans-serif';
-            if (displayTitle && displayTitle.trim()) {
+            if (displayTitle && displayTitle.trim() && displayTitle.toUpperCase() !== 'INDEPENDENT JOURNALIST') {
                 const titleText = displayTitle.trim().toUpperCase();
                 const maxWidth = rightW - 20; // Leave some margin
                 
@@ -402,19 +215,15 @@
                     yPos += 20;
                 } else {
                     // If the text doesn't fit on one line, we need to split it
-                    // Find a good breaking point to create two roughly equal lines
                     const words = titleText.split(/\s+/);
                     let line1 = '';
                     let line2 = '';
                     
-                    // Try to balance the words between two lines
                     if (words.length === 1) {
-                        // If it's a single long word, split it approximately in half
                         const midpoint = Math.floor(titleText.length / 2);
                         line1 = titleText.substring(0, midpoint) + '-';
                         line2 = titleText.substring(midpoint);
                     } else {
-                        // Find the best split point for multiple words
                         let currentLine = '';
                         let bestSplitIndex = 0;
                         let minDifference = Infinity;
@@ -442,8 +251,10 @@
                     // Draw the two lines
                     ctx.fillText(line1, rightCenterX, yPos);
                     yPos += 20;
-                    ctx.fillText(line2, rightCenterX, yPos);
-                    yPos += 20;
+                    if (line2) { // Only draw line 2 if it exists
+                        ctx.fillText(line2, rightCenterX, yPos);
+                        yPos += 20;
+                    }
                 }
             } else {
                 ctx.fillText('INDEPENDENT', rightCenterX, yPos);
@@ -505,7 +316,7 @@
             // Generate a pass number for tracking
             const passNumber = Math.floor(Math.random() * 1000000);
             
-            // Track the pass generation (in a real implementation, this would send to a server)
+            // Track the pass generation
             fetch('/api/track-pass', {
                 method: 'POST',
                 headers: {
@@ -520,7 +331,6 @@
                     timestamp: new Date().toISOString()
                 }),
             }).catch(error => {
-                // We catch and ignore errors to prevent disrupting the user experience
                 console.error('Tracking error (non-critical):', error);
             });
             
@@ -532,23 +342,11 @@
                         <head>
                             <title>Print Press Pass</title>
                             <style>
-                                body { 
-                                    margin: 0; 
-                                    padding: 20px; 
-                                    text-align: center;
-                                    font-family: Arial, sans-serif;
-                                }
-                                img { 
-                                    max-width: 100%; 
-                                    height: auto; 
-                                }
-                                .instructions {
-                                    margin-top: 20px;
-                                    font-size: 14px;
-                                }
+                                body { margin: 0; padding: 20px; text-align: center; font-family: Arial, sans-serif; }
+                                img { max-width: 100%; height: auto; }
+                                .instructions { margin-top: 20px; font-size: 14px; }
                             </style>
-                        <script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
-</head>
+                        </head>
                         <body>
                             <img src="${canvas.toDataURL('image/png')}" alt="Press Pass" />
                             <div class="instructions">
@@ -592,7 +390,7 @@
             // Generate a pass number for tracking
             const passNumber = Math.floor(Math.random() * 1000000);
             
-            // Track the pass generation (in a real implementation, this would send to a server)
+            // Track the pass generation
             fetch('/api/track-pass', {
                 method: 'POST',
                 headers: {
@@ -607,7 +405,6 @@
                     timestamp: new Date().toISOString()
                 }),
             }).catch(error => {
-                // We catch and ignore errors to prevent disrupting the user experience
                 console.error('Tracking error (non-critical):', error);
             });
             
@@ -618,17 +415,9 @@
                 link.download = `press-pass-${passNumber}.png`;
                 link.href = canvas.toDataURL('image/png');
                 
-                // Add text indicating it's for camera roll
-                const text = document.createElement('p');
-                text.textContent = 'Press Pass - Long press and save to camera roll';
-                text.style.textAlign = 'center';
-                text.style.fontWeight = 'bold';
-                text.style.marginTop = '10px';
-                
-                // Create a temporary container for both image and text
+                // Create a temporary container
                 const container = document.createElement('div');
                 container.appendChild(link);
-                container.appendChild(text);
                 
                 // Add to document, click, and remove
                 document.body.appendChild(container);
@@ -664,5 +453,3 @@
             }, 1000);
         }
     </script>
-</body>
-</html>
