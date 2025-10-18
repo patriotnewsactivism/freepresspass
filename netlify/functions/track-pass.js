@@ -20,7 +20,7 @@ exports.handler = async (event) => {
       statusCode: 405,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*', // Adjust in production
+        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type'
       },
       body: JSON.stringify({ error: 'Method not allowed' })
@@ -36,7 +36,7 @@ exports.handler = async (event) => {
         statusCode: 400,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // Adjust in production
+          'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Headers': 'Content-Type'
         },
         body: JSON.stringify({ error: 'Missing required fields: name, email, or pass_number' })
@@ -50,7 +50,7 @@ exports.handler = async (event) => {
         statusCode: 400,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // Adjust in production
+          'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Headers': 'Content-Type'
         },
         body: JSON.stringify({ error: 'Invalid email format' })
@@ -88,7 +88,7 @@ exports.handler = async (event) => {
         statusCode: 500,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // Adjust in production
+          'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Headers': 'Content-Type'
         },
         body: JSON.stringify({ 
@@ -104,7 +104,7 @@ exports.handler = async (event) => {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*', // Adjust in production
+        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type'
       },
       body: JSON.stringify({
@@ -119,7 +119,7 @@ exports.handler = async (event) => {
       statusCode: 500,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*', // Adjust in production
+        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type'
       },
       body: JSON.stringify({ 
