@@ -1,0 +1,51 @@
+    function drawPass(name, title) {
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Background
+      ctx.fillStyle = '#f8f9fa';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw border
+      ctx.strokeStyle = '#2c3e50';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
+      
+      // Header
+      const headerHeight = 80;
+      ctx.fillStyle = '#dc143c';
+      ctx.fillRect(0, 0, canvas.width, headerHeight);
+      
+      // Header text
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 24px "Helvetica", Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('PRESS PASS', canvas.width/2, 35);
+      
+      // Photo placeholder (larger)
+      ctx.fillStyle = '#e9ecef';
+      ctx.fillRect(20, 100, canvas.width - 40, 250);
+      
+      ctx.fillStyle = '#2c3e50';
+      ctx.font = '18px "Helvetica", Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('PHOTO AREA', canvas.width/2, 225);
+      
+      // Name and title
+      const orgY = 370;
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#2c3e50';
+      ctx.font = 'bold 32px "Helvetica", Arial, sans-serif';
+      ctx.fillText(name || 'YOUR NAME HERE', canvas.width/2, orgY);
+      
+      const startRightY = orgY + 70;
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#2c3e50';
+      ctx.font = 'bold 32px "Helvetica", Arial, sans-serif';
+      ctx.fillText(brandName(), canvas.width/2, startRightY);
+      ctx.font = 'bold 24px "Helvetica", Arial, sans-serif';
+      ctx.fillText(title, canvas.width/2, startRightY + 35);
+      
+      // Bottom metadata
+      const id = genPassId();
+      ctx.font = 'bold 18px "Helvetica", Arial, sans-serif';

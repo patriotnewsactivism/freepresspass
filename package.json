@@ -4,11 +4,12 @@
   "description": "Free Press Pass Generator with Stripe Integration",
   "main": "index.js",
   "scripts": {
-    "test": "echo &quot;Error: no test specified&quot; && exit 1"
+    "build": "echo \"No build step required\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "stripe": "^14.4.0"
-  },
+  }
   "keywords": ["press-pass", "journalism", "first-amendment"],
   "author": "Constitutional Press Association",
   "license": "MIT"
